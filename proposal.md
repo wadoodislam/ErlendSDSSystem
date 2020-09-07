@@ -53,4 +53,4 @@ The system will use Maria DB server as main Database Server.
 ## Relational Model:
 Following is the relational model of the database:
  
-![](db_design%20v02.png):
+![](db_design%20v02.png)
