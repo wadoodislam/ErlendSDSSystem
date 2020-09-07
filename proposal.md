@@ -49,3 +49,8 @@ We will also provide an admin panel to sort of manage and manually check and upd
 
 ## Maria DB
 The system will use Maria DB server as main Database Server.
+
+## Relational Model:
+Following is the relational model of the database:
+ 
+![](db_design%20v02.png):
