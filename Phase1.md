@@ -35,5 +35,5 @@ Setup a linux server to host the django web application and to run scrapers.
 ## Developers:
 Two developers will be assigned to the project.
 
-1. M Junaid Ikhlaq
-2. Rafay Javed
+1. M Junaid Ikhlaq (30 hours/week)
+2. Rafay Javed     (30 hours/week)
