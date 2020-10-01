@@ -24,6 +24,6 @@ class KulzerScraperSpider(CrawlSpider):
         for t, u in zip(title, url):
             yield {
                 'title': t.strip().replace('\r', '').replace('\n','').split('/', 1)[0],
-                'url': url,
+                'url': u,
                 'crawl_date': datetime.now().date().strftime('%d.%m.%Y')
             }
