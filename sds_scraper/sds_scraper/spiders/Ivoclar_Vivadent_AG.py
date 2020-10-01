@@ -11,15 +11,13 @@ class IvoclarVivadent(CrawlSpider):
 
     def start_requests(self):
         url = 'https://www.ivoclarvivadent.se/sv/skerhetsdatablad/'
-
         yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         # 1769 files
-        for items in response.xpath(
-                '//div[@class="grid__item one-half palm--one-whole"]/div[@class="item"]/div[@class="text"]').getall():
-            name = Selector(text=items).xpath('//a/text()').re(r'.*_NO')
-            url = Selector(text=items).xpath('//a/@href').re(r'.*_NO')
+        for items in response.css('div.text').getall():
+            name = Selector(text=items).css('a::text').re(r'.*_NO')
+            url = Selector(text=items).css('a::attr(href)').re(r'.*_NO')
             if name and url:
                 yield {
                     'source': 'Ivoclar_Vivadent_AG.py',
