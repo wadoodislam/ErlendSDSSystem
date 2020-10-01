@@ -5,7 +5,6 @@ from datetime import datetime
 
 class KulzerScraperSpider(CrawlSpider):
     name = 'kulzer_scraper'
-    base_url = 'https://www.ivoclarvivadent.se/'
 
     def start_requests(self):
         url = 'https://www.kulzer.com/en/int/downloads_5/downloads.aspx'
