@@ -1,10 +1,10 @@
 import json
 import os
+from datetime import datetime
 
 import scrapy
 from scrapy import Selector
 from scrapy.spiders import CrawlSpider
-from datetime import datetime
 
 from ..items import SdsScraperItem
 
