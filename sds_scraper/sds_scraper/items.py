@@ -7,6 +7,13 @@ import scrapy
 
 
 class SdsScraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    file_urls = scrapy.Field()
+    files = scrapy.Field()
+    source = scrapy.Field()
+    manufacturer = scrapy.Field()
+    file_display_name = scrapy.Field()
+    languages = scrapy.Field()
+    date = scrapy.Field()
+    document_type = scrapy.Field()
+    file_type = scrapy.Field()
+    crawl_date = scrapy.Field()

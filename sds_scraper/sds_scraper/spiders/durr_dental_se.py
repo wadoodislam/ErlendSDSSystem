@@ -1,9 +1,12 @@
 import json
+import os
 
 import scrapy
 from scrapy import Selector
 from scrapy.spiders import CrawlSpider
 from datetime import datetime
+
+from ..items import SdsScraperItem
 
 
 class DurDentalSpider(CrawlSpider):
@@ -43,24 +46,27 @@ class DurDentalSpider(CrawlSpider):
         )
 
     def parse(self, response):
+        sds_scraper_item = SdsScraperItem()
         content = json.loads(response.text)['content']
         for tile in Selector(text=content).css('div.tile').getall():
             file_display_name = Selector(text=tile).xpath('//*[@class="file_name"]/a/text()').get()
+            if file_display_name is None:
+                break
             lang_list = dict(zip(Selector(text=tile).css('div.languages select option').xpath('text()').getall(),
                                  Selector(text=tile).css('div.languages select option::attr(value)').getall()))
-            date = Selector(text=tile).css('div.date::text').re(r'\d\d?.\d\d?.\d\d?\d\d?')[0]
+            date = Selector(text=tile).css('div.date::text').re(r' (\d\d?.\d\d?.\d\d?\d\d?)', 1)[0]
             document_type = Selector(text=tile).css('div.document_type::text').get()
             file_type = Selector(text=tile).css('div.file_info span::text').get()
-            url = Selector(text=tile).css('h3.file_name a::attr(href)').get()
-
-            yield {
-                'source': 'durr_dental_se.py',
-                'manufacturer': 'DÜRR DENTAL SE',
-                'file_display_name': file_display_name,
-                'url': url,
-                'languages': lang_list,
-                'date': date,
-                'document_type': document_type,
-                'file_type': file_type,
-                'crawl_date': datetime.now().date().strftime('%d.%m.%Y')
-            }
+            sds_scraper_item['source'] = 'durr_dental_se.py'
+            sds_scraper_item['manufacturer'] = 'DÜRR DENTAL SE'
+            sds_scraper_item['file_display_name'] = file_display_name.replace(os.sep, '-')
+            sds_scraper_item['languages'] = lang_list
+            if 'NO' in lang_list:
+                sds_scraper_item['file_urls'] = [lang_list['NO']]
+            else:
+                sds_scraper_item['file_urls'] = [Selector(text=tile).css('h3.file_name a::attr(href)').get()]
+            sds_scraper_item['date'] = date
+            sds_scraper_item['document_type'] = document_type
+            sds_scraper_item['file_type'] = file_type
+            sds_scraper_item['crawl_date'] = datetime.now().date().strftime('%d.%m.%Y')
+            yield sds_scraper_item
