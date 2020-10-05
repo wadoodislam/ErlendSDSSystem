@@ -14,7 +14,7 @@ class FileDownloadPipeline(FilesPipeline):
     def file_path(self, request, response=None, info=None):
         # original_path = super(FileDownloadPipeline, self).file_path(request, response=None, info=None)
         # sha1_and_extension = original_path.split('/')[1]  # delete 'full/' from the path
-        return request.meta.get('manufacturer', '') + "/" + request.meta.get('filename', '') + ".pdf"
+        return request.meta.get('manufacturer', '') + "/" + request.meta.get('filename', '').strip() + ".pdf"
 
     def get_media_requests(self, item, info):
         file_url = item['file_urls'][0]
