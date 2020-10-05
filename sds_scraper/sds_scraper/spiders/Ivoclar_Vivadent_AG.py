@@ -17,11 +17,11 @@ class IvoclarVivadent(CrawlSpider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response, **kwargs):
-        sds_scraper_item = SdsScraperItem()
         for items in response.css('div.text').getall():
             name = Selector(text=items).css('a::text').re(r'.*_NO')
             url = Selector(text=items).css('a::attr(href)').re(r'.*_NO')
             if name and url:
+                sds_scraper_item = SdsScraperItem()
                 sds_scraper_item['source'] = 'Ivoclar_Vivadent_AG.py'
                 sds_scraper_item['manufacturer'] = 'Ivoclar Vivadent AG'
                 sds_scraper_item['file_display_name'] = name[0]

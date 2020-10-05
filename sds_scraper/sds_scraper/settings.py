@@ -64,9 +64,7 @@ ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
     'sds_scraper.pipelines.FileDownloadPipeline': 1,
 }
-
 FILES_STORE = r'/Users/junaidikhlaq/PycharmProjects/ErlendSDSSystem/sds_scraper/sds_scraper/sds_data/'
-
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

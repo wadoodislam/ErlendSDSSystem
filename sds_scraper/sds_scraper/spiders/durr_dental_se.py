@@ -46,7 +46,6 @@ class DurDentalSpider(CrawlSpider):
         )
 
     def parse(self, response):
-        sds_scraper_item = SdsScraperItem()
         content = json.loads(response.text)['content']
         for tile in Selector(text=content).css('div.tile').getall():
             file_display_name = Selector(text=tile).xpath('//*[@class="file_name"]/a/text()').get()
@@ -57,6 +56,7 @@ class DurDentalSpider(CrawlSpider):
             date = Selector(text=tile).css('div.date::text').re(r' (\d\d?.\d\d?.\d\d?\d\d?)', 1)[0]
             document_type = Selector(text=tile).css('div.document_type::text').get()
             file_type = Selector(text=tile).css('div.file_info span::text').get()
+            sds_scraper_item = SdsScraperItem()
             sds_scraper_item['source'] = 'durr_dental_se.py'
             sds_scraper_item['manufacturer'] = 'DÜRR DENTAL SE'
             sds_scraper_item['file_display_name'] = file_display_name.replace(os.sep, '-')
