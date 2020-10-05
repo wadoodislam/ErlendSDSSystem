@@ -40,7 +40,9 @@ INSTALLED_APPS = [
 ]
 
 LOCAL_APPS = [
-    'accounts'
+    'accounts',
+    'core',
+    'phonenumber_field'
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -131,3 +133,5 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+PHONENUMBER_DB_FORMAT = 'E164'
