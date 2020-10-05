@@ -4,3 +4,4 @@
 sds_scraper/sds_scraper/__pycache__/__init__.cpython-37.pyc
 *.pyc
 /sds_scraper/sds_scraper/sds_data/
+*.csv
