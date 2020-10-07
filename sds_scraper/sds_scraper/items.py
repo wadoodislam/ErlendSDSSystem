@@ -17,3 +17,4 @@ class SdsScraperItem(scrapy.Item):
     document_type = scrapy.Field()
     file_type = scrapy.Field()
     crawl_date = scrapy.Field()
+    provider = scrapy.Field()

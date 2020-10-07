@@ -62,7 +62,8 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'sds_scraper.pipelines.FileDownloadPipeline': 1,
+    'sds_scraper.pipelines.BoilerplatePipeline': 10,
+    'sds_scraper.pipelines.FileDownloadPipeline': 20,
 }
 FILES_STORE = r'/Users/junaidikhlaq/PycharmProjects/ErlendSDSSystem/sds_scraper/sds_scraper/sds_data/'
 
@@ -78,7 +79,8 @@ FILES_STORE = r'/Users/junaidikhlaq/PycharmProjects/ErlendSDSSystem/sds_scraper/
 # AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
 # AUTOTHROTTLE_DEBUG = False
-
+# Enable media redirects
+MEDIA_ALLOW_REDIRECTS = True
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 # HTTPCACHE_ENABLED = True
