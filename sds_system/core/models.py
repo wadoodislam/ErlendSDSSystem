@@ -18,13 +18,16 @@ class Product(models.Model):
     name = models.CharField(max_length=30)
     language = models.ForeignKey(Language, on_delete=CASCADE)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=CASCADE)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class ProducerOfSDS(models.Model):
     name = models.CharField(max_length=30)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
-
-
+class SDS(models.Model):
+    name = models.CharField(max_length=30)
+    url = models.URLField()
+    file = models.FileField(null=True, upload_to='pdf')
+    created_at = models.DateTimeField(auto_now_add=True)

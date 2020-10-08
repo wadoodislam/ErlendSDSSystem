@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 LOCAL_APPS = [
     'accounts',
     'core',
-    'phonenumber_field'
+    'phonenumber_field',
+    'rest_framework'
 ]
 
 INSTALLED_APPS += LOCAL_APPS
