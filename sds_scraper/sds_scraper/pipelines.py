@@ -5,9 +5,13 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+import requests
 
 
-class SdsScraperPipeline:
+class KulzerScraperPipeline:
+
     def process_item(self, item, spider):
+        requests.post(url="http://127.0.0.1:8000/api/sds/",
+                      files={'file': open("H:/PyCharm Projects/ErlendExtra/downloads/"+item['files'][0]['path'], 'rb')},
+                      data={'name': item['name'], 'url': item['file_urls']})
         return item

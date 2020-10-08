@@ -62,9 +62,12 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'sds_scraper.pipelines.SdsScraperPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'sds_scraper.pipelines.KulzerScraperPipeline': 300,
+   'scrapy.pipelines.files.FilesPipeline': 1
+}
+
+FILES_STORE = 'H:\PyCharm Projects\ErlendExtra\downloads'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
