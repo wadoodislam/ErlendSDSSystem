@@ -3,3 +3,7 @@ djangorestframework==3.12.1
 django-phonenumber-field==5.0.0
 phonenumbers==8.12.10
 requests==2.24.0
+
+scrapy==2.3.0
+injector==0.18.4
+
