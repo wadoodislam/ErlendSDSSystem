@@ -64,6 +64,7 @@ ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
     'sds_scraper.pipelines.BoilerplatePipeline': 10,
     'sds_scraper.pipelines.FileDownloadPipeline': 20,
+    'sds_scraper.pipelines.SDSExtractorPipeline': 30,
 }
 FILES_STORE = r'/Users/junaidikhlaq/PycharmProjects/ErlendSDSSystem/sds_scraper/sds_scraper/sds_data/'
 

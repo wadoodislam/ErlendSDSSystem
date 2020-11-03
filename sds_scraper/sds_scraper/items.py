@@ -18,3 +18,6 @@ class SdsScraperItem(scrapy.Item):
     file_type = scrapy.Field()
     crawl_date = scrapy.Field()
     provider = scrapy.Field()
+    raw_pdf_text = scrapy.Field()
+    pdf_squashed = scrapy.Field()
+    pdf_text = scrapy.Field()
