@@ -6,6 +6,9 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BOT_NAME = 'sds_scraper'
 
@@ -66,7 +69,7 @@ ITEM_PIPELINES = {
     'sds_scraper.pipelines.FileDownloadPipeline': 20,
     'sds_scraper.pipelines.SDSExtractorPipeline': 30,
 }
-FILES_STORE = r'/Users/junaidikhlaq/PycharmProjects/ErlendSDSSystem/sds_scraper/sds_scraper/sds_data/'
+FILES_STORE = f'{BASE_DIR}/sds_scraper/sds_data/'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

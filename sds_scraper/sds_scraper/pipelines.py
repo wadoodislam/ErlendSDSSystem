@@ -7,7 +7,6 @@ from datetime import datetime
 # useful for handling different item types with a single interface
 from io import StringIO
 
-import PyPDF2
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfdocument import PDFDocument
@@ -16,8 +15,9 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 from scrapy.http import Request
 from scrapy.pipelines.files import FilesPipeline
+from scrapy.utils.project import get_project_settings
 
-from .config import Configuration
+settings = get_project_settings()
 
 
 class BoilerplatePipeline:
@@ -40,8 +40,7 @@ class FileDownloadPipeline(FilesPipeline):
 
 
 class SDSExtractorPipeline:
-    DATE_REPLACE = False
-    config = Configuration()
+    DATE_REPLACE = True
     FIND_MAX_LENGHT = 50
     Relevant_Splitter = re.compile(r'AVSNITT|SECTION')
     HAZARD_CODE_PATTERN = re.compile(r'(?:EUH|[H|P])\s?\d\d\d\w*(?:\+(?:EUH|[H|P])*\d\d\d\w*)*')
@@ -95,14 +94,12 @@ class SDSExtractorPipeline:
 
     def process_item(self, item, spider):
         path = item['files'][0]['path']
-        item['raw_pdf_text'] = self.read_pdf(self.config.DATA_DIR + path)
+        item['raw_pdf_text'] = self.read_pdf(settings.get('FILES_STORE') + path)
         self.relevent_text(item, spider)
         self.process_data(item)
         return item
 
     def process_data(self, item):
-        pdf_text = item['pdf_text']
-        raw_dates = item['pdf_squashed']
         product_name = self.product_name(item)
         manufacturer = self.manufacture_name(item)
         hazard_codes = self.hazard_code(item)
