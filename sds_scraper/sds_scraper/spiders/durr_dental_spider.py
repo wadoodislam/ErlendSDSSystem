@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import scrapy
 from scrapy import Selector

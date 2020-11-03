@@ -1,0 +1,18 @@
+ssh -i sdskey softcreed@46.255.22.60 -p 2001
+sudo apt install python3
+python3 --version
+sudo apt install python3-pip
+pip3 --version
+sudo apt install python3-venv
+python3 -m venv venv
+sudo apt install git
+git clone https://github.com/wadoodislam/ErlendSDSSystem.git
+echo "source ${HOME}/venv/bin/activate" >> ${HOME}/.bash_profile
+source ~/.bash_profile
+cd ErlendSDSSystem/
+pip install -r requirements.txt
+
+
+Usefull Commands:
+lsof -i:6800
+sudo kill -9 $(lsof -t -i:6800)

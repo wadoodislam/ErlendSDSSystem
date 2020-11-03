@@ -6,4 +6,5 @@ requests==2.24.0
 
 scrapy==2.3.0
 injector==0.18.4
-
+scrapyd==1.2.1
+pdfminer==20191125
