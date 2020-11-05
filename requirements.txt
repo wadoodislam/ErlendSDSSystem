@@ -3,3 +3,6 @@ djangorestframework==3.12.1
 django-phonenumber-field==5.0.0
 phonenumbers==8.12.10
 requests==2.24.0
+django-cors-headers==3.5.0
+django-rest-auth==0.9.5
+django-allauth==0.43.0
