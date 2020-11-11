@@ -1,4 +1,5 @@
 import os
+import re
 
 from . import SDSBaseCrawlSpider
 from ..items import SdsScraperItem
@@ -9,6 +10,8 @@ class Mixin:
     manufacturer = 'Tonne Dental'
     source = os.path.basename(__file__)
     start_urls = ['https://www.tonnedental.no/datablader/']
+    Relevant_Splitter = re.compile(r'AVSNITT|IDENTIFISERING')
+    HAZARD_CODE_PATTERN = re.compile(r'(?:EUH|[H|P])\s?\d\d\d*(?:\+(?:EUH|[H|P])*\d\d\d*)*')
 
 
 class TonneDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):

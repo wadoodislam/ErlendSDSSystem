@@ -65,11 +65,19 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'sds_scraper.pipelines.BoilerplatePipeline': 10,
-    'sds_scraper.pipelines.FileDownloadPipeline': 20,
-    'sds_scraper.pipelines.SDSExtractorPipeline': 30,
+    'sds_scraper.pipelines.FileDownloadPipeline': 10,
+    'sds_scraper.pipelines.BoilerplatePipeline': 20,
+    'sds_scraper.pipelines.SDSTextExtractorPipeline': 30,
+    'sds_scraper.pipelines.SDSRelevantTextExtractorPipeline': 40,
+    'sds_scraper.pipelines.SDSHazardCodeExtractorPipeline': 50,
+    'sds_scraper.pipelines.SDSProductNameExtractorPipeline': 60,
+    'sds_scraper.pipelines.SDSManufactureExtractorPipeline': 70,
+    'sds_scraper.pipelines.SDSPrintDateExtractorPipeline': 80,
+    'sds_scraper.pipelines.SDSRevisionDateExtractorPipeline': 90,
+    'sds_scraper.pipelines.SDSExtractorPipeline': 100,
 }
 FILES_STORE = f'{BASE_DIR}/sds_scraper/sds_data/'
+SERVER_ADDRESS = 'http://127.0.0.1:8000'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

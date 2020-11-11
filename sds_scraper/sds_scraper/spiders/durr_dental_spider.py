@@ -15,6 +15,20 @@ class Mixin:
     source = os.path.basename(__file__)
     start_urls = ['https://www.duerrdental.com/fileadmin/assets/apps/dlc/DlcProxy.php']
 
+    PRODUCT_STRATEGY = {
+        'activation': 'XOR',
+        'procedures': [
+            [
+                ('SUB', re.compile(r'Trade name\s*:.*?\n|Handelsnavn.*?\n'), 'PRODUCT_NAME'),
+                ('SUB', re.compile(r'Revision\s*:.*?\n|Redigert.*?\n'), ''),
+                ('SUB', re.compile(r'Revision date\s*:.*?\n|Redigeringsdato.*?\n'), ''),
+                ('SUB', re.compile(r'Print date\s*:.*?\n|Utskriftsdato.*?\n'), ''),
+                ('SEARCH', re.compile(r'PRODUCT_NAME\n?\s*(.*?)\n'), 1),
+            ]
+
+        ]
+    }
+
 
 class DurDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):
     name = Mixin.provider + '_crawl'
