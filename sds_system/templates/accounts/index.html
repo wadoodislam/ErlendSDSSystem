@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        <h3 class=" site-heading my-4 mt-3 text-white">
+         {% if user.is_authenticated %}
+            Welcome to Home Page {{ user.username }}
+            {% else %}
+            Welcome to Home Page
+            {% endif %}
+        </h3>
+        <p>
+        <a href="{% url 'logout' %}">Log-out</a>
+        </p>
+    </div>
+
+{% endblock content%}
