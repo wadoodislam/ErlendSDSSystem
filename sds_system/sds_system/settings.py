@@ -136,3 +136,5 @@ LOGOUT_REDIRECT_URL = 'login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PHONENUMBER_DB_FORMAT = 'E164'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
