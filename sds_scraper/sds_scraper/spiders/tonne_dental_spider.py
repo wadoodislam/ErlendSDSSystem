@@ -21,5 +21,5 @@ class TonneDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):
         for url in response.css('p a::attr(href)').getall():
             sds_scraper_item = SdsScraperItem()
             sds_scraper_item['file_urls'] = [url]
-            sds_scraper_item['file_display_name'] = url.split('/')[-1].replace('_' or '-', ' ').split('.')[0] + ".pdf"
+            sds_scraper_item['name'] = url.split('/')[-1].replace('_' or '-', ' ').split('.')[0] + ".pdf"
             yield sds_scraper_item

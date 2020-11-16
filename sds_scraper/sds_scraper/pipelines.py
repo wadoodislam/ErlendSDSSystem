@@ -1,7 +1,9 @@
+import json
 import re
 from datetime import datetime
 from io import StringIO
 
+import requests
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfdocument import PDFDocument
@@ -18,7 +20,7 @@ settings = get_project_settings()
 class FileDownloadPipeline(FilesPipeline):
 
     def file_path(self, request, response=None, info=None):
-        return f"{info.spider.provider}/" + request.meta['item']['file_display_name']
+        return f"{info.spider.provider}/" + request.meta['item']['name']
 
     def get_media_requests(self, item, info):
         yield Request(url=item['file_urls'][0], meta={'item': item})
@@ -31,8 +33,11 @@ class BoilerplatePipeline:
         item['manufacturer_name'] = spider.manufacturer
         item['source'] = spider.source
         item['crawl_date'] = datetime.now().strftime('%d.%m.%Y')
+        item['sds_path'] = item['files'][0]['path']
         item['sds_status'] = item['files'][0]['status']
         item['sds_url'] = item['files'][0]['url']
+
+        item['language'] = 'norwegian'
         return item
 
 
@@ -170,23 +175,22 @@ class SDSRevisionDateExtractorPipeline:
 class SDSExtractorPipeline:
 
     def process_item(self, item, spider):
-        # print('path: ', item['files'][0]['path'])
-        # print('product_name: ', item['sds_pdf_product_name'])
-        # print('hazard_codes: ', item['sds_pdf_Hazards_identification'])
-        # print('manufacturer: ', item['sds_pdf_manufacture_name'])
-        # print('print_date: ', item['sds_pdf_print_date'])
-        # print('revision_date: ', item['sds_pdf_revision_date'])
         item.pop('pdf_text')
         item.pop('raw_pdf_text')
         item.pop('pdf_squashed')
         item.pop('files')
+        item.pop('file_urls')
         return item
 
 
 class SDSDatabasePipeline:
 
     def process_item(self, item, spider):
-        settings.get('SERVER_ADDRESS')+'/'
+        url = settings.get('SERVER_ADDRESS') + '/api/product/'
+        data = json.dumps(dict(item))
+        headers = {'Content-type': 'application/json', 'Accept': '*/*'}
+        response = requests.post(url, data=data, headers=headers)
+
 
 class Strategies:
     FIND_MAX_LENGHT = 50

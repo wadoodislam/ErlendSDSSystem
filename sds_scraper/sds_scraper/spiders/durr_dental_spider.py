@@ -14,6 +14,7 @@ class Mixin:
     manufacturer = 'DÜRR DENTAL SE'
     source = os.path.basename(__file__)
     start_urls = ['https://www.duerrdental.com/fileadmin/assets/apps/dlc/DlcProxy.php']
+    base_url = 'https://www.duerrdental.com/en/services/download-centre/'
 
     PRODUCT_STRATEGY = {
         'activation': 'XOR',
@@ -69,8 +70,8 @@ class DurDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):
             lang_list = dict(zip(tile.css('div.languages select option::text').getall(),
                                  tile.css('div.languages select option::attr(value)').getall()))
             sds_scraper_item = SdsScraperItem()
-            sds_scraper_item['file_display_name'] = (tile.css('h3.file_name a::text').get()).replace(os.sep,
-                                                                                                     '-') + '.pdf'
+            sds_scraper_item['name'] = (tile.css('h3.file_name a::text').get()).replace(os.sep,
+                                                                                        '-') + '.pdf'
             sds_scraper_item['languages'] = lang_list
             if 'NO' in lang_list:
                 sds_scraper_item['file_urls'] = [lang_list['NO']]
@@ -78,5 +79,6 @@ class DurDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):
                 sds_scraper_item['file_urls'] = [tile.css('h3.file_name a::attr(href)').get()]
             sds_scraper_item['date'] = tile.css('div.date::text').re(r' (\d\d?.\d\d?.\d\d?\d\d?)', 1)[0]
             sds_scraper_item['document_type'] = tile.css('div.document_type::text').get()
+            sds_scraper_item['url'] = self.base_url
             sds_scraper_item['file_type'] = tile.css('div.file_info span::text').get()
             yield sds_scraper_item

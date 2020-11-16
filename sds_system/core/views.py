@@ -17,7 +17,7 @@ class LanguageViewSet(viewsets.ModelViewSet):
 
 
 class ManufacturerViewSet(viewsets.ModelViewSet):
-    queryset = Manufacturer.objects.all()
+    queryset = Provider.objects.all()
     serializer_class = ManufacturerSerializer
 
 
