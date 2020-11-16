@@ -16,6 +16,10 @@ class Mixin:
     start_urls = ['https://www.duerrdental.com/fileadmin/assets/apps/dlc/DlcProxy.php']
     base_url = 'https://www.duerrdental.com/en/services/download-centre/'
 
+    DATE_REPLACE = False
+    DATE_FORMATS = r'\d\d-\d\d-\d\d\d\d|\d\d\d\d-\d\d-\d\d|\d?\d\.\d?\d\.\d?\d?\d\d|\d\d\/\d\d\/\d\d\d\d|\d?\d [a-zA-Z]{3} \d?\d?\d\d'
+    DATE_PATTERN = re.compile(DATE_FORMATS)
+
     PRODUCT_STRATEGY = {
         'activation': 'XOR',
         'procedures': [
@@ -29,6 +33,47 @@ class Mixin:
 
         ]
     }
+
+    MANUFACTURE_STRATEGIES = [
+        {
+            'activation': 'XOR',
+            'procedures': [
+                [
+                    ('SUB', re.compile(r'Leverandør.*?\n|Supplier.*?\(.*\n.*\).*\n\s*'), 'COMPANY_NAME'),
+                    ('SEARCH', re.compile(r'COMPANY_NAME(.*?)\n'), 1),
+                ],
+
+            ]
+        }
+    ]
+
+    PRINT_STRATEGY = [
+        {
+            'activation': 'XOR',
+            'procedures': [
+                [
+                    ('FINDALL', re.compile(rf'Utskriftsdato.*?({DATE_FORMATS})'), ' '),
+                ],
+                [
+                    ('FINDALL', re.compile(rf'Print\sdate.*?({DATE_FORMATS})'), ' '),
+                ],
+            ]
+        }
+    ]
+
+    REVISION_STRATEGY = [
+        {
+            'activation': 'XOR',
+            'procedures': [
+                [
+                    ('FINDALL', re.compile(rf'Redigert :.*?({DATE_FORMATS})'), ' '),
+                ],
+                [
+                    ('FINDALL', re.compile(rf'Revision :.*?({DATE_FORMATS})'), ' '),
+                ]
+            ]
+        }
+    ]
 
 
 class DurDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):

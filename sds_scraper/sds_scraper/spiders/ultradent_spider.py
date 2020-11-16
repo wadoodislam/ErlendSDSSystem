@@ -13,18 +13,25 @@ class Mixin:
     source = os.path.basename(__file__)
     start_urls = ['https://www.ultradent.com/resources/safety-data-sheets']
 
-    Relevant_Splitter = re.compile(r'\n\d\s[A-Z]')
+    Relevant_Splitter = re.compile(r'\n\d\s[A-Z]|KAPITTEL')
 
     DATE_REPLACE = False
-    DATE_FORMATS = r'\d?\d\.\d?\d\.\d?\d?\d\d'
+    DATE_FORMATS = r'\d\d-\d\d-\d\d\d\d|\d\d\d\d-\d\d-\d\d|\d?\d\.\d?\d\.\d?\d?\d\d|\d\d?\/\d\d?\/\d\d?\d\d?|\d?\d [a-zA-Z]{3} \d?\d?\d\d'
     DATE_PATTERN = re.compile(DATE_FORMATS)
 
     PRODUCT_STRATEGY = {
         'activation': 'XOR',
         'procedures': [
             [
+                ('SUB', re.compile(r'Produktnavn.*?\nProduktbeskrivelse.*?\n:.*?\n'), 'PRODUCT_NAME'),
+                # ('SUB', re.compile(r'Produktbeskrivelse.*?\n'), ''),
+                # ('SUB', re.compile(r':.*?\n'), ''),
+                ('SEARCH', re.compile(r'PRODUCT_NAME: \n?(.*?)\n'), 1),
+            ],
+            [
                 ('SEARCH', re.compile(r'Handelsnavn: \n?\s*(.*?)\n'), 1),
-            ]
+            ],
+
         ]
     }
 
@@ -33,10 +40,13 @@ class Mixin:
             'activation': 'XOR',
             'procedures': [
                 [
+                    ('SUB', re.compile(r'Produsent.*?\n'), 'COMPANY_NAME'),
+                    ('SEARCH', re.compile(r'COMPANY_NAME\n?(.*?)\n'), 1),
+                ],
+                [
                     ('SUB', re.compile(r'Produsent\/leverandør.*?\n'), 'COMPANY_NAME'),
                     ('SEARCH', re.compile(r'COMPANY_NAME\n?(.*?)\n'), 1),
                 ],
-
             ]
         }
     ]
@@ -47,7 +57,7 @@ class Mixin:
             'procedures': [
                 [
                     ('FINDALL', re.compile(rf'Trykkdato.*?({DATE_FORMATS})'), ' '),
-                ]
+                ],
             ]
         }
     ]
@@ -58,7 +68,11 @@ class Mixin:
             'procedures': [
                 [
                     ('FINDALL', re.compile(rf'revidert.*?({DATE_FORMATS})'), ' '),
-                ]
+                ], [
+                    ('FINDALL', re.compile(rf'Revidert.*?({DATE_FORMATS})'), ' '),
+                ],[
+                    ('FINDALL', re.compile(rf'Revisjonsdato.*?({DATE_FORMATS})'), ' '),
+                ],
             ]
         }
     ]

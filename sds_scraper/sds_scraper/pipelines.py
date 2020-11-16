@@ -45,6 +45,8 @@ class SDSTextExtractorPipeline:
 
     def process_item(self, item, spider):
         path = item['files'][0]['path']
+        # path = 'ultradent/VALO® Cordless & VALO® Ortho Cordless Rechargeable Battery SDS (Norwegian).pdf'
+
         item['raw_pdf_text'] = self.read_pdf(settings.get('FILES_STORE') + path)
         return item
 
@@ -96,18 +98,6 @@ class SDSProductNameExtractorPipeline:
 
 
 class SDSManufactureExtractorPipeline:
-    # MANUFACTURE_STRATEGIES = [
-    #     {
-    #         'activation': 'XOR',
-    #         'procedures': [
-    #             [
-    #                 ('SUB', re.compile(r'Leverandør.*?\n|Supplier.*?\(.*\n.*\).*\n\s*'), 'COMPANY_NAME'),
-    #                 ('SEARCH', re.compile(r'COMPANY_NAME(.*?)\n'), 1),
-    #             ],
-    #
-    #         ]
-    #     }
-    # ]
 
     def process_item(self, item, spider):
         self.MANUFACTURE_STRATEGIES = getattr(spider, 'MANUFACTURE_STRATEGIES')
@@ -119,22 +109,6 @@ class SDSManufactureExtractorPipeline:
 
 
 class SDSPrintDateExtractorPipeline:
-    # DATE_REPLACE = False
-    # DATE_FORMATS = r'\d\d-\d\d-\d\d\d\d|\d\d\d\d-\d\d-\d\d|\d?\d\.\d?\d\.\d?\d?\d\d|\d\d\/\d\d\/\d\d\d\d|\d?\d [a-zA-Z]{3} \d?\d?\d\d'
-    # DATE_PATTERN = re.compile(DATE_FORMATS)
-    # PRINT_STRATEGY = [
-    #     {
-    #         'activation': 'XOR',
-    #         'procedures': [
-    #             [
-    #                 ('FINDALL', re.compile(rf'Utskriftsdato.*?({DATE_FORMATS})'), ' '),
-    #             ],
-    #             [
-    #                 ('FINDALL', re.compile(rf'Print\sdate.*?({DATE_FORMATS})'), ' '),
-    #             ],
-    #         ]
-    #     }
-    # ]
 
     def process_item(self, item, spider):
         self.PRINT_STRATEGY = getattr(spider, 'PRINT_STRATEGY')
@@ -146,22 +120,6 @@ class SDSPrintDateExtractorPipeline:
 
 
 class SDSRevisionDateExtractorPipeline:
-    # DATE_REPLACE = False
-    # DATE_FORMATS = r'\d\d-\d\d-\d\d\d\d|\d\d\d\d-\d\d-\d\d|\d?\d\.\d?\d\.\d?\d?\d\d|\d\d\/\d\d\/\d\d\d\d|\d?\d [a-zA-Z]{3} \d?\d?\d\d'
-    # DATE_PATTERN = re.compile(DATE_FORMATS)
-    # REVISION_STRATEGY = [
-    #     {
-    #         'activation': 'XOR',
-    #         'procedures': [
-    #             [
-    #                 ('FINDALL', re.compile(rf'Redigert :.*?({DATE_FORMATS})'), ' '),
-    #             ],
-    #             [
-    #                 ('FINDALL', re.compile(rf'Revision :.*?({DATE_FORMATS})'), ' '),
-    #             ]
-    #         ]
-    #     }
-    # ]
 
     def process_item(self, item, spider):
         self.REVISION_STRATEGY = getattr(spider, 'REVISION_STRATEGY')
