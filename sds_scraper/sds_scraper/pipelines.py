@@ -148,6 +148,7 @@ class SDSDatabasePipeline:
         data = json.dumps(dict(item))
         headers = {'Content-type': 'application/json', 'Accept': '*/*'}
         response = requests.post(url, data=data, headers=headers)
+        return item
 
 
 class Strategies:
