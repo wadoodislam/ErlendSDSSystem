@@ -1,7 +1,9 @@
 from rest_framework import viewsets
-
+from django.http import JsonResponse
+from django.shortcuts import render
 from .models import *
 from .serializers import *
+from django.core import serializers
 
 User = get_user_model()
 
@@ -34,3 +36,13 @@ class ProducerOfSDSViewSet(viewsets.ModelViewSet):
 class SDSViewSet(viewsets.ModelViewSet):
     queryset = SDS.objects.all()
     serializer_class = SDSSerializer
+
+
+def dashboard_with_pivot(request):
+    return render(request, 'core/stats_dashboard.html', {})
+
+
+def pivot_data(request):
+    dataset = Product.objects.all()
+    data = serializers.serialize('json', dataset)
+    return JsonResponse(data, safe=False)
