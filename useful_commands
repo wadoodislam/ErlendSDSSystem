@@ -16,3 +16,4 @@ pip install -r requirements.txt
 Usefull Commands:
 lsof -i:6800
 sudo kill -9 $(lsof -t -i:6800)
+uwsgi --reload /tmp/safe-pidfile.pid
