@@ -75,7 +75,7 @@ ITEM_PIPELINES = {
     'sds_scraper.pipelines.SDSPrintDateExtractorPipeline': 80,
     'sds_scraper.pipelines.SDSRevisionDateExtractorPipeline': 90,
     'sds_scraper.pipelines.SDSExtractorPipeline': 100,
-    # 'sds_scraper.pipelines.SDSDatabasePipeline': 200,
+    'sds_scraper.pipelines.SDSDatabasePipeline': 200,
 }
 FILES_STORE = f'{BASE_DIR}/sds_scraper/sds_data/'
 SERVER_ADDRESS = 'http://127.0.0.1:8000'
