@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import viewsets
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -42,7 +43,8 @@ def dashboard_with_pivot(request):
     return render(request, 'core/stats_dashboard.html', {})
 
 
-def pivot_data(request):
-    dataset = Product.objects.all()
-    data = serializers.serialize('json', dataset)
-    return JsonResponse(data, safe=False)
+def provider_stats(request):
+    obj = [{'provider': count_obj['name'], 'products': count_obj['count']}
+           for count_obj in Provider.objects.annotate(count=Count('product')).values('name', 'count')]
+    return JsonResponse(obj, safe=False)
+

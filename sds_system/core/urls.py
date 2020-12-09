@@ -13,7 +13,7 @@ router.register('sds', SDSViewSet)
 
 urlpatterns = [
     path('', dashboard_with_pivot, name='dashboard_with_pivot'),
-    path('data', pivot_data, name='pivot_data'),
+    path('data', provider_stats, name='pivot_data'),
 ]
 
 urlpatterns += router.urls
