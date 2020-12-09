@@ -5,7 +5,8 @@ from .forms import UserCreateForm
 
 
 def home(request):
-    return render(request, 'accounts/index.html')
+    #return render(request, 'accounts/index.html')
+    return redirect('admin/')
 
 
 def signup(request):
