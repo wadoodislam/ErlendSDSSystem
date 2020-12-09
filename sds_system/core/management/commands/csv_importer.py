@@ -23,11 +23,10 @@ class Command(BaseCommand):
         compressed_path = kwargs['path']
         provider_name = kwargs['provider_name']
         file_name = os.path.split(compressed_path)[1]
-        directory = os.path.split(compressed_path)[0]
-        Archive(compressed_path).extractall(directory)
+        Archive(compressed_path).extractall('extracted_temp')
 
         """Reading CSV File and Putting in model"""
-        csv_file_path = os.path.join(directory, os.path.join(file_name.split('.')[0], file_name.split('.')[0] + ".csv"))
+        csv_file_path = os.path.join('extracted_temp', os.path.join(file_name.split('.')[0], file_name.split('.')[0] + ".csv"))
         print('csv_file_path: ', csv_file_path)
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
