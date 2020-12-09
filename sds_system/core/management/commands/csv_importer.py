@@ -1,11 +1,11 @@
 import csv
 import os
+import datetime
 
 from django.core.management import BaseCommand
 from pyunpack import Archive
 
 from core.models import Product, Language, Provider
-
 
 
 class Command(BaseCommand):
@@ -23,38 +23,25 @@ class Command(BaseCommand):
         compressed_path = kwargs['path']
         provider_name = kwargs['provider_name']
         file_name = os.path.split(compressed_path)[1]
-        directory = os.path.split(compressed_path)[0]
-        Archive(compressed_path).extractall(directory)
+        Archive(compressed_path).extractall('extracted_temp')
 
         """Reading CSV File and Putting in model"""
-        csv_file_path = os.path.join(directory, os.path.join(file_name.split('.')[0], file_name.split('.')[0] + ".csv"))
+        csv_file_path = os.path.join('extracted_temp', os.path.join(file_name.split('.')[0], file_name.split('.')[0] + ".csv"))
         print('csv_file_path: ', csv_file_path)
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
-                # name = row['product_name']
-                # source = row['source']
-                # if "_spider" not in source.split('.')[0]:
-                #     source = f'{source.split(".")[0]}_spider.py'
-                # language = row['sds_language']
-                # provider = provider_name
-                # sds_pdf_product_name = row['sds_pdf_product_name']
-                # sds_pdf_Hazards_identification = row['sds_pdf_Hazards_identification']
-                # sds_pdf_manufacture_name = row['sds_pdf_manufacture_name']
-                # sds_pdf_print_date = row['sds_pdf_published_date']
-                # sds_pdf_revision_date = row['sds_pdf_revision_date']
-                # sds_url = row['product_url']
-
-                # Product Model
                 prov = Provider.objects.get(name=provider_name)
                 lang = Language.objects.get(name=row['sds_language'])
-                product_model = Product(name=row['product_name'],
+                product_model = Product(name=os.path.split(row['sds_pdf_filename_in_zip'])[1],
                                         language=lang,
                                         provider=prov,
                                         sds_pdf_product_name=row['sds_pdf_product_name'],
                                         sds_pdf_Hazards_identification=row['sds_pdf_Hazards_identification'],
                                         sds_pdf_manufacture_name=row['sds_pdf_manufacture_name'],
-                                        sds_pdf_print_date=row['sds_pdf_published_date'],
-                                        sds_pdf_revision_date=row['sds_pdf_revision_date'],
+                                        sds_pdf_print_date=datetime.datetime.strptime(row['sds_pdf_published_date'],
+                                                                                      '%d.%m.%Y').replace(tzinfo=datetime.timezone.utc),
+                                        sds_pdf_revision_date=datetime.datetime.strptime(row['sds_pdf_revision_date'],
+                                                                                         '%d.%m.%Y').replace(tzinfo=datetime.timezone.utc),
                                         sds_url=row['product_url'])
                 product_model.save()
