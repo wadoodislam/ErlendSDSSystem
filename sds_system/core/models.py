@@ -1,3 +1,4 @@
+from datetime import date
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import CASCADE
@@ -27,8 +28,8 @@ class Product(models.Model):
     sds_pdf_product_name = models.CharField(max_length=100, blank=True, null=True)
     sds_pdf_Hazards_identification = models.CharField(max_length=250, blank=True, null=True)
     sds_pdf_manufacture_name = models.CharField(max_length=100, blank=True, null=True)
-    sds_pdf_print_date = models.CharField(max_length=30, blank=True, null=True)
-    sds_pdf_revision_date = models.CharField(max_length=30, blank=True, null=True)
+    sds_pdf_print_date = models.DateField(default=date.today, blank=True, null=True)
+    sds_pdf_revision_date = models.DateField(default=date.today, blank=True, null=True)
     sds_url = models.CharField(max_length=250, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
