@@ -1,3 +1,5 @@
+import json
+
 from django.db.models import Count
 from rest_framework import viewsets
 from django.http import JsonResponse
@@ -40,7 +42,15 @@ class SDSViewSet(viewsets.ModelViewSet):
 
 
 def dashboard_with_pivot(request):
-    return render(request, 'core/stats_dashboard.html', {})
+    labels = []
+    data = []
+    for table_data in provider_stats(request):
+        provider_dict = json.loads(table_data)
+    for chart in provider_dict:
+        labels.append(chart['provider'])
+        data.append(chart['products'])
+
+    return render(request, 'core/stats_dashboard.html', {'table': provider_dict, 'labels': labels, 'data': data})
 
 
 def provider_stats(request):
