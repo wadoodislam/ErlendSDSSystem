@@ -89,6 +89,17 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'netpower',
+        'USER': 'netpower',
+        'PASSWORD': 'FTb5vr18$%GO',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

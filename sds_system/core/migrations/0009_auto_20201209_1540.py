@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='sds_pdf_print_date',
-            field=models.DateField(blank=True, default='09.12.2020', null=True),
+            field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='product',
             name='sds_pdf_revision_date',
-            field=models.DateField(blank=True, default='09.12.2020', null=True),
+            field=models.DateField(blank=True, null=True),
         ),
     ]

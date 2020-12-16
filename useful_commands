@@ -17,3 +17,18 @@ Usefull Commands:
 lsof -i:6800
 sudo kill -9 $(lsof -t -i:6800)
 uwsgi --reload /tmp/safe-pidfile.pid
+
+
+Installing MariaDb:
+sudo apt install mariadb-server
+checking version: mysql -V
+checking status: sudo systemctl status mariadb
+
+getting into server: sudo mariadb -u root
+getting all users: SELECT User, Host, plugin FROM mysql.user;
+
+create DB: CREATE DATABASE <db_name> CHARACTER SET UTF8;
+create user for database: CREATE USER myprojectuser@localhost IDENTIFIED BY 'password';
+grant privileges: GRANT ALL PRIVILEGES ON <db_name>.* TO myprojectuser@localhost;
+https://www.digitalocean.com/community/tutorials/how-to-use-mysql-or-mariadb-with-your-django-application-on-ubuntu-14-04
+
