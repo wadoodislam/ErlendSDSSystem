@@ -88,17 +88,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'netpower',
-        'USER': 'netpower',
-        'PASSWORD': 'FTb5vr18$%GO',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'netpower',
+#         'USER': 'netpower',
+#         'PASSWORD': 'FTb5vr18$%GO',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation

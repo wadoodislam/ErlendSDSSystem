@@ -47,3 +47,9 @@ class SDS(models.Model):
     url = models.URLField()
     file = models.FileField(null=True, upload_to='pdf')
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Wishlist(models.Model):
+    supplier = models.CharField(max_length=100)
+    trade_name = models.CharField(max_length=100)
+    language = models.CharField(max_length=30)

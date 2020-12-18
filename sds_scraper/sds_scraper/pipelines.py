@@ -32,7 +32,7 @@ class BoilerplatePipeline:
         item['provider'] = spider.provider
         item['manufacturer_name'] = spider.manufacturer
         item['source'] = spider.source
-        item['crawl_date'] = datetime.now().strftime('%d.%m.%Y')
+        item['crawl_date'] = datetime.now().strftime('%d-%m-%Y')
         item['sds_path'] = item['files'][0]['path']
         item['sds_status'] = item['files'][0]['status']
         item['sds_url'] = item['files'][0]['url']
@@ -142,12 +142,11 @@ class SDSExtractorPipeline:
 
 
 class SDSDatabasePipeline:
+    url = settings.get('SERVER_ADDRESS') + '/api/product/'
+    headers = {'Content-type': 'application/json', 'Accept': '*/*'}
 
     def process_item(self, item, spider):
-        url = settings.get('SERVER_ADDRESS') + '/api/product/'
-        data = json.dumps(dict(item))
-        headers = {'Content-type': 'application/json', 'Accept': '*/*'}
-        response = requests.post(url, data=data, headers=headers)
+        response = requests.post(self.url, data=json.dumps(dict(item)), headers=self.headers)
         return item
 
 
@@ -167,19 +166,19 @@ class Strategies:
 
     def _date_formatter(self, date_str):
         if '/' in date_str:
-            return datetime.strptime(date_str, '%d/%m/%Y').strftime('%d.%m.%Y')
+            return datetime.strptime(date_str, '%d/%m/%Y').strftime('%Y-%m-%d')
         elif '-' in date_str:
             try:
-                return datetime.strptime(date_str, '%Y-%m-%d').strftime('%d.%m.%Y')
+                return datetime.strptime(date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
             except:
-                return datetime.strptime(date_str, '%d-%m-%Y').strftime('%d.%m.%Y')
+                return datetime.strptime(date_str, '%d-%m-%Y').strftime('%Y-%m-%d')
         elif '.' in date_str:
             if re.match(r'\d?\d\.\d?\d\.\d\d\d\d', date_str):
-                return datetime.strptime(date_str, '%d.%m.%Y').strftime('%d.%m.%Y')
+                return datetime.strptime(date_str, '%d.%m.%Y').strftime('%Y-%m-%d')
             elif re.match(r'\d?\d\.\d?\d\.\d\d', date_str):
-                return datetime.strptime(date_str, '%d.%m.%y').strftime('%d.%m.%Y')
+                return datetime.strptime(date_str, '%d.%m.%y').strftime('%Y-%m-%d')
         elif re.match(r'\d?\d [a-zA-Z]{3} \d\d\d\d', date_str):
-            return datetime.strptime(date_str, '%d %b %Y').strftime('%d.%m.%Y')
+            return datetime.strptime(date_str, '%d %b %Y').strftime('%Y-%m-%d')
 
     def apply_strategy(self, strategy, raw_text):
         activation = strategy['activation']

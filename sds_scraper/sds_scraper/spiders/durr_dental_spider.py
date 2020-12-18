@@ -122,7 +122,7 @@ class DurDentalCrawlSpider(Mixin, SDSBaseCrawlSpider):
                 sds_scraper_item['file_urls'] = [lang_list['NO']]
             else:
                 sds_scraper_item['file_urls'] = [tile.css('h3.file_name a::attr(href)').get()]
-            sds_scraper_item['date'] = tile.css('div.date::text').re(r' (\d\d?.\d\d?.\d\d?\d\d?)', 1)[0]
+            sds_scraper_item['date'] = '-'.join(reversed(tile.css('div.date::text').re(r' (\d\d?.\d\d?.\d\d?\d\d?)', 1)[0]))
             sds_scraper_item['document_type'] = tile.css('div.document_type::text').get()
             sds_scraper_item['url'] = self.base_url
             sds_scraper_item['file_type'] = tile.css('div.file_info span::text').get()
