@@ -1,12 +1,11 @@
 import json
 
 from django.db.models import Count
-from rest_framework import viewsets
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import *
+from rest_framework import viewsets
+
 from .serializers import *
-from django.core import serializers
 
 User = get_user_model()
 
