@@ -8,7 +8,8 @@ User = get_user_model()
 
 class Provider(models.Model):
     name = models.CharField(max_length=100)
-    created_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -16,6 +17,8 @@ class Provider(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=30)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -31,6 +34,7 @@ class Product(models.Model):
     sds_pdf_print_date = models.DateField(default=date.today, blank=True, null=True)
     sds_pdf_revision_date = models.DateField(default=date.today, blank=True, null=True)
     sds_url = models.CharField(max_length=250, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -39,6 +43,7 @@ class Product(models.Model):
 
 class ProducerOfSDS(models.Model):
     name = models.CharField(max_length=30)
+    updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -46,6 +51,7 @@ class SDS(models.Model):
     name = models.CharField(max_length=30)
     url = models.URLField()
     file = models.FileField(null=True, upload_to='pdf')
+    updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -53,3 +59,5 @@ class Wishlist(models.Model):
     supplier = models.CharField(max_length=100)
     trade_name = models.CharField(max_length=100)
     language = models.CharField(max_length=30)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
