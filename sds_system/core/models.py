@@ -1,7 +1,8 @@
-from datetime import date
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import CASCADE
+import hashlib
+from datetime import date
 
 User = get_user_model()
 
@@ -25,6 +26,7 @@ class Language(models.Model):
 
 
 class Product(models.Model):
+    id = models.CharField(primary_key=True, editable=False, null=False, max_length=32)
     name = models.CharField(max_length=100)
     language = models.ForeignKey(Language, on_delete=CASCADE)
     provider = models.ForeignKey(Provider, on_delete=CASCADE)
@@ -36,6 +38,11 @@ class Product(models.Model):
     sds_url = models.CharField(max_length=250, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        pk = str(self.provider) + '-' + str(self.sds_pdf_product_name)
+        self.id = hashlib.md5(pk.encode()).hexdigest()
+        super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
