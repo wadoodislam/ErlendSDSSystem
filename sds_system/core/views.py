@@ -21,9 +21,9 @@ class LanguageViewSet(viewsets.ModelViewSet):
     serializer_class = LanguageSerializer
 
 
-class ManufacturerViewSet(viewsets.ModelViewSet):
+class ProviderViewSet(viewsets.ModelViewSet):
     queryset = Provider.objects.all()
-    serializer_class = ManufacturerSerializer
+    serializer_class = ProviderSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):

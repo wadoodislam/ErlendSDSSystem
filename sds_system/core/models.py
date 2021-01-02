@@ -23,7 +23,7 @@ class Language(models.Model):
 
 
 class Product(models.Model):
-    hash = models.CharField(primary_key=True, editable=False, null=False, max_length=500, default=None)
+    id = models.CharField(primary_key=True, editable=False, null=False, max_length=32)
     name = models.CharField(max_length=100)
     language = models.ForeignKey(Language, on_delete=CASCADE)
     provider = models.ForeignKey(Provider, on_delete=CASCADE)
@@ -37,7 +37,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         pk = str(self.provider) + '-' + str(self.sds_pdf_product_name)
-        self.hash = hashlib.md5(pk.encode()).hexdigest()
+        self.id = hashlib.md5(pk.encode()).hexdigest()
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
