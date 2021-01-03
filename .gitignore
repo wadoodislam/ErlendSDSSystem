@@ -3,6 +3,5 @@
 /.idea/
 sds_scraper/sds_scraper/__pycache__/__init__.cpython-37.pyc
 *.pyc
-/sds_scraper/sds_scraper/sds_data/
 *.csv
-/sds_system/extracted_temp/
+/sds_system/sds_system/settings/dev/
