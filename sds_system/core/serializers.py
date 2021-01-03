@@ -26,7 +26,7 @@ class LanguageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     provider = serializers.CharField(max_length=100)
     language = serializers.CharField(max_length=100)
-    hash = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -34,12 +34,12 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attr):
+        attr[''] = Language.objects.get(name=attr['language'])
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['provider'] = Provider.objects.get(name=attr['provider'])
         return attr
 
-    @staticmethod
-    def get_hash(obj):
+    def get_hash(self, obj):
         hashed = str(obj.provider.name) + '-' + str(obj.sds_pdf_product_name)
         return hashlib.md5(hashed.encode()).hexdigest()
 

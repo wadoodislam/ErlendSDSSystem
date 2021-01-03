@@ -20,7 +20,7 @@ settings = get_project_settings()
 class FileDownloadPipeline(FilesPipeline):
 
     def file_path(self, request, response=None, info=None):
-        return f"{info.spider.provider}/" + request.meta['item']['name']
+        return f"{info.spider.provider}/sds/" + request.meta['item']['name']
 
     def get_media_requests(self, item, info):
         yield Request(url=item['file_urls'][0], meta={'item': item})

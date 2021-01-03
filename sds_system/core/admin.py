@@ -1,14 +1,15 @@
 from django.contrib import admin
 
-from .models import Provider, Product, Language
+from .models import Provider, Product, Language, SDS
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('sds_pdf_product_name', 'sds_pdf_manufacture_name', 'sds_pdf_Hazards_identification', 'provider')
+    list_display = ('sds_product_name', 'sds_manufacture_name', 'sds_hazards_codes', 'provider')
     list_filter = ('provider',)
-    search_fields = ['sds_pdf_manufacture_name', 'provider__name', 'sds_pdf_product_name']
+    search_fields = ['sds_manufacture_name', 'provider__name', 'sds_product_name']
 
 
 admin.site.register(Provider)
+admin.site.register(SDS)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Language)
