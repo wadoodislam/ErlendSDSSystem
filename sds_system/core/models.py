@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import CASCADE
 
 User = get_user_model()
 
 
 class Provider(models.Model):
     name = models.CharField(max_length=100)
+    primary = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -26,8 +26,8 @@ class Language(models.Model):
 class Product(models.Model):
     id = models.CharField(primary_key=True, editable=False, null=False, max_length=32)
     name = models.CharField(max_length=100)
-    language = models.ForeignKey(Language, on_delete=CASCADE)
-    provider = models.ForeignKey(Provider, on_delete=CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.PROTECT)
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     link = models.URLField()
 
     sds_url = models.URLField()
@@ -49,15 +49,6 @@ class Product(models.Model):
 
 class ProducerOfSDS(models.Model):
     name = models.CharField(max_length=30)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class SDS(models.Model):
-    name = models.CharField(max_length=30)
-    url = models.URLField()
-
-    file = models.FileField(upload_to='sds')
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

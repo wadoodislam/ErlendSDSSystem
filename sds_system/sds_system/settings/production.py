@@ -25,7 +25,7 @@ SECRET_KEY = '75u%d++d)7+=@jr5*0loxqn@ilc0@j$&c$yu@1zb@zbt_&qy-l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['46.255.22.60', '127.0.0.1']
+ALLOWED_HOSTS = ['46.255.22.60']
 
 MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}:8080/'
 # Application definition
@@ -144,4 +144,5 @@ PHONENUMBER_DB_FORMAT = 'E164'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-
+MEDIA_ROOT = 'media/'
+MEDIA_URL = '/media/'

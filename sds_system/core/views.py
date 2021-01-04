@@ -35,11 +35,6 @@ class ProducerOfSDSViewSet(viewsets.ModelViewSet):
     serializer_class = ProducerOfSDSSerializer
 
 
-class SDSViewSet(viewsets.ModelViewSet):
-    queryset = SDS.objects.all()
-    serializer_class = SDSSerializer
-
-
 def dashboard_with_pivot(request):
     labels = []
     data = []

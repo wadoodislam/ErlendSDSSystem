@@ -1,3 +1,5 @@
+import hashlib
+
 from rest_framework import serializers
 
 from .models import *
@@ -50,7 +52,3 @@ class ProducerOfSDSSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SDSSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SDS
-        fields = '__all__'

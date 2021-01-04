@@ -3,6 +3,7 @@ import hashlib
 import os
 from datetime import datetime, timezone
 
+from django.conf import settings
 from django.core.management import BaseCommand
 from pyunpack import Archive
 
@@ -10,23 +11,24 @@ from core.models import Product, Language, Provider
 
 
 class Helper:
-    SDS_PATH = f'sds'
+    SDS_PATH = f'media/sds'
 
     def hash(self, name, provider):
         hashed = name + '-' + provider
         return hashlib.md5(hashed.encode()).hexdigest()
 
-    def make_products(self, csv_file_path, provider):
+    def make_products(self, csv_file_path, provider, is_primary=True):
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
-                prov, _ = Provider.objects.get_or_create(name=provider)
+                prov, _ = Provider.objects.update_or_create(name=provider, defaults={'primary': is_primary})
                 lang, _ = Language.objects.get_or_create(name=row['sds_language'])
                 product, _ = Product.objects.update_or_create(
                     id=self.hash(row['sds_pdf_product_name'], provider),
                     defaults={
                         'name': os.path.split(row['sds_pdf_filename_in_zip'])[1],
                         'language': lang, 'provider': prov,
+                        'link': f"{settings.MACHINE_URL}media/sds/{provider}{row['sds_pdf_filename_in_zip']}".replace(' ', '%20'),
                         'sds_product_name': row['sds_pdf_product_name'],
                         'sds_hazards_codes': row['sds_pdf_Hazards_identification'],
                         'sds_manufacture_name': row['sds_pdf_manufacture_name'],
@@ -36,7 +38,7 @@ class Helper:
                         'sds_revision_date': datetime.strptime(row['sds_pdf_revision_date'],
                                                                '%d.%m.%Y').replace(tzinfo=timezone.utc),
                         'sds_url': row['product_url'],
-                        'sds_path': f"sds/{provider}{row['sds_pdf_filename_in_zip']}"
+
                     }
                 )
                 product.save()
@@ -48,6 +50,7 @@ class Command(BaseCommand, Helper):
     def add_arguments(self, parser):
         parser.add_argument('path', type=str, help='Path to csv zip files, that need to be extracted')
         parser.add_argument('provider', type=str, help='Provider Name')
+        parser.add_argument('--secondary', dest='is_primary', default=True, action='store_false')
 
     def handle(self, *args, **kwargs):
 
@@ -60,4 +63,4 @@ class Command(BaseCommand, Helper):
         """Reading CSV File and Putting in model"""
         csv_file_path = os.path.join(target_folder, f"{provider}/{provider}.csv")
         print('csv_file_path: ', csv_file_path)
-        self.make_products(csv_file_path, provider)
+        self.make_products(csv_file_path, provider, kwargs['is_primary'])

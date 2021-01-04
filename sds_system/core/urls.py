@@ -9,7 +9,6 @@ router.register('manufacturer', ProviderViewSet)
 router.register('language', LanguageViewSet)
 router.register('product', ProductViewSet)
 router.register('producer', ProducerOfSDSViewSet)
-router.register('sds', SDSViewSet)
 
 urlpatterns = [
     path('', dashboard_with_pivot, name='dashboard_with_pivot'),
