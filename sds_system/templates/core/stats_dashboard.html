@@ -5,8 +5,6 @@
 
 </head>
 <body>
-    <div id="pivot-table-container" data-url="{% url 'pivot_data' %}"></div>
-    <div id="pivot-chart-container"></div>
     <style>
         table, th, td {
           border: 1px solid black;
@@ -23,10 +21,10 @@
                 <th>Provider Name</th>
                 <th>Product Count</th>
             </tr>
-            {% for table_data in table %}
+            {% for provider, count in table.items %}
             <tr>
-                <td>{{ table_data.provider }}</td>
-                <td>{{ table_data.products }}</td>
+                <td>{{ provider }}</td>
+                <td>{{ count }}</td>
             </tr>
 
 
