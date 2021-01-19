@@ -25,9 +25,9 @@ SECRET_KEY = '75u%d++d)7+=@jr5*0loxqn@ilc0@j$&c$yu@1zb@zbt_&qy-l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['46.255.22.60:8080']
+ALLOWED_HOSTS = ['46.255.22.60']
 
-MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}/'
+MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}:8080/'
 # Application definition
 
 INSTALLED_APPS = [
