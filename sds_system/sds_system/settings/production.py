@@ -36,14 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
 ]
 
 LOCAL_APPS = [
     'accounts',
     'core',
     'phonenumber_field',
-    'rest_framework'
+    'rest_framework',
+    # 'django_elasticsearch_dsl'
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -146,3 +147,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_ROOT = 'media/'
 MEDIA_URL = '/media/'
+
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200'
+    },
+}

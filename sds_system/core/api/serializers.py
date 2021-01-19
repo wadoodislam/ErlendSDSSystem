@@ -1,8 +1,7 @@
-import hashlib
-
 from rest_framework import serializers
 
-from .models import *
+from core.models import *
+from core.utils import md5hash
 
 User = get_user_model()
 
@@ -28,7 +27,6 @@ class LanguageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     provider = serializers.CharField(max_length=100)
     language = serializers.CharField(max_length=100)
-    id = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -36,14 +34,17 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attr):
-        attr[''] = Language.objects.get(name=attr['language'])
+        attr['id'] = md5hash(attr['sds_product_name'], attr['provider'])
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['provider'] = Provider.objects.get(name=attr['provider'])
         return attr
 
-    def get_hash(self, obj):
-        hashed = str(obj.provider.name) + '-' + str(obj.sds_pdf_product_name)
-        return hashlib.md5(hashed.encode()).hexdigest()
+    def create(self, validated_data):
+        instance = Product.objects.filter(id=validated_data['id'])
+        if instance.exists():
+            return self.update(instance[0], validated_data)
+
+        return super().create(validated_data)
 
 
 class ProducerOfSDSSerializer(serializers.ModelSerializer):

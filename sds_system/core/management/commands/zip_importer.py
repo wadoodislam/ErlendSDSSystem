@@ -38,7 +38,6 @@ class Helper:
                         'sds_revision_date': datetime.strptime(row['sds_pdf_revision_date'],
                                                                '%d.%m.%Y').replace(tzinfo=timezone.utc),
                         'sds_url': row['product_url'],
-
                     }
                 )
                 product.save()

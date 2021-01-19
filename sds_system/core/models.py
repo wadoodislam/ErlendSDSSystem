@@ -57,5 +57,7 @@ class Wishlist(models.Model):
     supplier = models.CharField(max_length=100)
     trade_name = models.CharField(max_length=100)
     language = models.CharField(max_length=30)
+    matched = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
