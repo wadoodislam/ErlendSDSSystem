@@ -36,3 +36,5 @@ print db list: show databases;
 
 
 https://phoenixnap.com/kb/install-elasticsearch-ubuntu
+
+./manage.py search_index --rebuild
