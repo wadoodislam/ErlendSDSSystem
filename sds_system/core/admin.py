@@ -10,7 +10,7 @@ class ProviderAdmin(admin.ModelAdmin):
 
 
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ('supplier', 'trade_name', 'language', 'matched',)
+    list_display = ('trade_name', 'supplier', 'language', 'matched',)
     list_filter = ('matched',)
     search_fields = ['supplier', 'trade_name', ]
 
