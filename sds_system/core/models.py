@@ -28,7 +28,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    link = models.URLField()
+    link = models.URLField(blank=True)
 
     sds_url = models.URLField()
     sds_product_name = models.CharField(max_length=100)

@@ -32,12 +32,11 @@ class BoilerplatePipeline:
         item['provider'] = spider.provider
         item['manufacturer_name'] = spider.manufacturer
         item['source'] = spider.source
-        item['crawl_date'] = datetime.now().strftime('%d-%m-%Y')
+        item['crawled_at'] = str(datetime.now())
         item['sds_path'] = item['files'][0]['path']
         item['sds_status'] = item['files'][0]['status']
         item['sds_url'] = item['files'][0]['url']
-
-        item['language'] = 'norwegian'
+        item['language'] = 'nb'
         return item
 
 
@@ -81,7 +80,7 @@ class SDSHazardCodeExtractorPipeline:
         self.HAZARD_CODE_PATTERN = getattr(spider, 'HAZARD_CODE_PATTERN', self.HAZARD_CODE_PATTERN)
         raw_codes = self.__hazard_section(item)
         raw_codes = '+'.join([part.strip() for part in raw_codes.split('+')])
-        item['sds_pdf_Hazards_identification'] = ','.join(sorted(set(re.findall(self.HAZARD_CODE_PATTERN, raw_codes))))
+        item['sds_Hazards_identification'] = ','.join(sorted(set(re.findall(self.HAZARD_CODE_PATTERN, raw_codes))))
         return item
 
     def __hazard_section(self, item):
@@ -93,7 +92,7 @@ class SDSProductNameExtractorPipeline:
 
     def process_item(self, item, spider):
         self.PRODUCT_STRATEGY = getattr(spider, 'PRODUCT_STRATEGY')
-        item['sds_pdf_product_name'] = Strategies().apply_strategy(self.PRODUCT_STRATEGY, item['pdf_text'])
+        item['sds_product_name'] = Strategies().apply_strategy(self.PRODUCT_STRATEGY, item['pdf_text'])
         return item
 
 
@@ -104,7 +103,7 @@ class SDSManufactureExtractorPipeline:
         raw_manfacturer = item['pdf_text']
         for strategy in self.MANUFACTURE_STRATEGIES:
             raw_manfacturer = Strategies().apply_strategy(strategy, raw_manfacturer)
-        item['sds_pdf_manufacture_name'] = raw_manfacturer
+        item['sds_manufacture_name'] = raw_manfacturer
         return item
 
 
@@ -114,7 +113,7 @@ class SDSPrintDateExtractorPipeline:
         self.PRINT_STRATEGY = getattr(spider, 'PRINT_STRATEGY')
         self.DATE_PATTERN = getattr(spider, 'DATE_PATTERN')
         self.DATE_REPLACE = getattr(spider, 'DATE_REPLACE')
-        item['sds_pdf_print_date'] = Strategies().date_extractor(self.PRINT_STRATEGY, item, self.DATE_PATTERN,
+        item['sds_print_date'] = Strategies().date_extractor(self.PRINT_STRATEGY, item, self.DATE_PATTERN,
                                                                  self.DATE_REPLACE)
         return item
 
@@ -125,7 +124,7 @@ class SDSRevisionDateExtractorPipeline:
         self.REVISION_STRATEGY = getattr(spider, 'REVISION_STRATEGY')
         self.DATE_PATTERN = getattr(spider, 'DATE_PATTERN')
         self.DATE_REPLACE = getattr(spider, 'DATE_REPLACE')
-        item['sds_pdf_revision_date'] = Strategies().date_extractor(self.REVISION_STRATEGY, item, self.DATE_PATTERN,
+        item['sds_revision_date'] = Strategies().date_extractor(self.REVISION_STRATEGY, item, self.DATE_PATTERN,
                                                                     self.DATE_REPLACE)
         return item
 
@@ -142,7 +141,7 @@ class SDSExtractorPipeline:
 
 
 class SDSDatabasePipeline:
-    url = settings.get('SERVER_ADDRESS') + '/api/product/'
+    url = settings.get('SERVER_ADDRESS') + '/core/api/product/'
     headers = {'Content-type': 'application/json', 'Accept': '*/*'}
 
     def process_item(self, item, spider):

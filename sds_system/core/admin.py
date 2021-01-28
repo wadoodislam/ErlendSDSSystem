@@ -10,11 +10,11 @@ class ProviderAdmin(admin.ModelAdmin):
 
 
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ('trade_name', 'supplier', 'language', 'matched', 'product')
+    list_display = ('trade_name', 'supplier', 'language', 'matched', 'match')
     list_filter = ('matched',)
     search_fields = ['supplier', 'trade_name', ]
 
-    def product(self, obj):
+    def match(self, obj):
         if obj.matched:
             return format_html(f'<a href="{obj.product.link}" target="_blank">{obj.product.sds_product_name}</a>')
         else:
