@@ -7,7 +7,7 @@ router.register('user', UserViewSet)
 router.register('provider', ProviderViewSet)
 router.register('language', LanguageViewSet)
 router.register('product', ProductViewSet)
-# router.register('producer', ProducerOfSDSViewSet)
+router.register('wishlist', WishlistViewSet)
 
 urlpatterns = []
 

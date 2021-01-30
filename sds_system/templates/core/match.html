@@ -1,0 +1,59 @@
+<head>
+  <meta charset="UTF-8">
+  <title>Search</title>
+
+</head>
+<body>
+    {% block content %}
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 5px;
+          text-align: left;
+        }
+        #submit_button {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        </style>
+        <h1>SDS Match Maker</h1>
+
+        <div>
+            <h2>Matches</h2>
+            <form action="pair/{{ wishlist_id }}" method="post">
+            {% csrf_token %}
+                <table>
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <th>Trade Name</th>
+                        <th>Supplier</th>
+                        <th>PDF Link</th>
+                        <th>Select</th>
+                    </tr>
+                    {% for product in products %}
+
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.sds_product_name }}</td>
+                            <td>{{ product.sds_manufacture_name }}</td>
+                            <td><a href="{{ product.link }}" target="_blank">PDF</a></td>
+                            <td>
+                                <input type="radio" value={{ product.id }} name="match">
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <input id="submit_button" type="submit" value="Submit">
+            </form>
+
+        </div>
+    {% endblock %}
+
+</body>

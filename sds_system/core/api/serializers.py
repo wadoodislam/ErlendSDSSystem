@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from core.models import *
@@ -35,8 +36,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def validate(self, attr):
         attr['id'] = md5hash(attr['sds_product_name'], attr['provider'])
+        attr['link'] = f"{settings.MACHINE_URL}media/sds/{attr['provider']}/sds/{attr['name']}".replace(' ', '%20')
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['provider'] = Provider.objects.get(name=attr['provider'])
+
         return attr
 
     def create(self, validated_data):
@@ -52,4 +55,9 @@ class ProducerOfSDSSerializer(serializers.ModelSerializer):
         model = ProducerOfSDS
         fields = '__all__'
 
+
+class WishlistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = '__all__'
 
