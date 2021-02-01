@@ -7,7 +7,6 @@ router.register('user', UserViewSet)
 router.register('provider', ProviderViewSet)
 router.register('language', LanguageViewSet)
 router.register('product', ProductViewSet)
-router.register('wishlist', WishlistViewSet)
 
 urlpatterns = []
 

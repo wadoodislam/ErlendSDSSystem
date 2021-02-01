@@ -32,8 +32,3 @@ class ProviderViewSet(viewsets.ModelViewSet):
         obj = [{'provider': count_obj['name'], 'products': count_obj['count']}
                for count_obj in Provider.objects.annotate(count=Count('product')).values('name', 'count')]
         return JsonResponse(obj, safe=False)
-
-
-class WishlistViewSet(viewsets.ModelViewSet):
-    queryset = Wishlist.objects.all()
-    serializer_class = WishlistSerializer
