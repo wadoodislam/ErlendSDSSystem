@@ -5,10 +5,18 @@ User = get_user_model()
 
 
 class Provider(models.Model):
+
+    STATUS_CHOICE = [
+        ('PE', 'Pending'),
+        ('CR', 'Crawling'),
+        ('DI', 'Disabled')
+    ]
+
     name = models.CharField(max_length=100)
     primary = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICE, default='PE')
 
     def __str__(self):
         return self.name

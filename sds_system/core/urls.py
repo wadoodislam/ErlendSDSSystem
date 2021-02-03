@@ -8,6 +8,6 @@ urlpatterns = [
     path('match/<int:id>', match, name='match'),
     path('match/pair/<int:wishlist_id>', pair, name='pair'),
 
-    path('', dashboard_with_pivot, name='dashboard_with_pivot'),
+    path('', dashboard_with_pivot, name='stats'),
 ]
 
