@@ -18,6 +18,11 @@ class Helper:
         return hashlib.md5(hashed.encode()).hexdigest()
 
     def make_products(self, csv_file_path, harvest, is_primary=True):
+        langs = []
+        harvests = []
+        manufacturers = []
+        pdfs = []
+        products = []
         with open(csv_file_path) as csv_file:
             csv_reader = list(csv.DictReader(csv_file))
             for row in tqdm(csv_reader, total=len(csv_reader)):
@@ -28,11 +33,13 @@ class Helper:
                         'primary': is_primary,
                     }
                 )
-                harvest_obj.save()
+                harvests.append(harvest_obj)
                 lang, _ = Language.objects.get_or_create(name=row['sds_language'])
-                lang.save()
+                if _:
+                    langs.append(lang)
                 manufacturer, _ = Manufacturer.objects.get_or_create(name=row['sds_pdf_manufacture_name'])
-                manufacturer.save()
+                if _:
+                    manufacturers.append(manufacturer)
 
                 pdf, _ = SDS_PDF.objects.update_or_create(
                     pdf_md5=self.hash(row['sds_pdf_product_name'], harvest_obj.id),
@@ -52,14 +59,19 @@ class Helper:
                                                                '%d.%m.%Y').replace(tzinfo=timezone.utc)
                     }
                 )
-                pdf.save()
+                if _:
+                    pdfs.append(pdf)
 
                 product, _ = Product.objects.get_or_create(
                         name=row['sds_pdf_product_name'],
                         language=lang,
                         sds_pdf=pdf
                 )
-                product.save()
+                if _:
+                    products.append(product)
+
+        SDS_PDF.objects.bulk_create(pdfs)
+        Product.objects.bulk_create(products)
 
 
 class Command(BaseCommand, Helper):
