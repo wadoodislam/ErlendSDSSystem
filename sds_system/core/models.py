@@ -4,16 +4,6 @@ from django.db import models
 User = get_user_model()
 
 
-class Provider(models.Model):
-    name = models.CharField(max_length=100)
-    primary = models.BooleanField(default=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Language(models.Model):
     name = models.CharField(max_length=30)
     updated_at = models.DateTimeField(auto_now=True)
@@ -24,33 +14,14 @@ class Language(models.Model):
 
 
 class Product(models.Model):
-    id = models.CharField(primary_key=True, editable=False, null=False, max_length=32)
     name = models.CharField(max_length=100)
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    link = models.URLField(blank=True)
-
-    sds_url = models.URLField()
-    sds_product_name = models.CharField(max_length=100)
-    sds_hazards_codes = models.CharField(max_length=250, blank=True, null=True)
-    sds_manufacture_name = models.CharField(max_length=100)
-    sds_print_date = models.DateField(blank=True, null=True)
-    sds_published_date = models.DateField(blank=True, null=True)
-    sds_revision_date = models.DateField(blank=True, null=True)
-    sds_release_date = models.DateField(blank=True, null=True)
-
-    crawled_at = models.DateTimeField()
+    sds_pdf = models.ForeignKey('SDS_PDF', on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
-
-
-class ProducerOfSDS(models.Model):
-    name = models.CharField(max_length=30)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Wishlist(models.Model):
@@ -62,3 +33,101 @@ class Wishlist(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+# Erlend Models
+
+
+class SDSHarvestSource(models.Model):
+    class STATUS(models.TextChoices):
+        RUNNING = 'Running'
+        PENDING = 'Pending'
+        DEVELOPED = 'Developed'
+
+    class TYPE(models.TextChoices):
+        RUNNING = 'Running'
+        PENDING = 'Pending'
+        DEVELOPED = 'Developed'
+
+    class METHOD(models.TextChoices):
+        SCRAPING = 'Scraping'
+        ZIP = 'Zip'
+
+    id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, choices=STATUS.choices, default=STATUS.PENDING, blank=True)
+    type = models.CharField(max_length=10, choices=TYPE.choices, blank=True)
+    primary = models.BooleanField(default=True)
+    description = models.CharField(max_length=500, null=True)
+    method = models.CharField(max_length=10, choices=METHOD.choices, default=METHOD.ZIP, blank=True)
+    rerun_interval_days = models.IntegerField(default=1)
+    last_run_at = models.DateTimeField(null=True)
+    developer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='developer')
+    responsible_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='responsible_user')
+    ready_for_crawling = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class SDSHarvestRun(models.Model):
+    sds_harvest_source = models.ForeignKey(SDSHarvestSource, on_delete=models.CASCADE)
+    run_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    no_of_revision_found = models.IntegerField(default=1)
+    no_of_new_sds_found = models.IntegerField(default=1)
+    ended_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField()
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Manufacturer(models.Model):
+    name = models.CharField(max_length=100)
+    alias = models.ForeignKey('Manufacturer', null=True, on_delete=models.PROTECT)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ProducerOfSDS(models.Model):
+    name = models.CharField(max_length=30)
+    alias = models.ForeignKey('ProducerOfSDS', on_delete=models.PROTECT)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class SDS_PDF(models.Model):
+
+    class Meta:
+        verbose_name = "sds pdf"
+
+    name = models.CharField(max_length=100)
+    sds_harvest_run = models.ForeignKey(SDSHarvestRun, models.SET_NULL, null=True)
+    sds_harvest_source = models.ForeignKey(SDSHarvestSource, models.PROTECT)
+    pdf_md5 = models.CharField(primary_key=True, null=False, max_length=32)
+    from_primary = models.BooleanField(default=True)
+
+    language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT)
+
+    sds_link = models.URLField()
+    sds_download_url = models.URLField()
+    sds_product_name = models.CharField(max_length=100)
+    sds_hazards_codes = models.CharField(max_length=250, blank=True, null=True)
+
+    sds_print_date = models.DateField(blank=True, null=True)
+    sds_published_date = models.DateField(blank=True, null=True)
+    sds_revision_date = models.DateField(blank=True, null=True)
+    sds_release_date = models.DateField(blank=True, null=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

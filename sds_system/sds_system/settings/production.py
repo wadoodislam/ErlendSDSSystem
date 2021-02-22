@@ -44,7 +44,7 @@ LOCAL_APPS = [
     'core',
     'phonenumber_field',
     'rest_framework',
-    'django_elasticsearch_dsl'
+    # 'django_elasticsearch_dsl'
 ]
 
 INSTALLED_APPS += LOCAL_APPS

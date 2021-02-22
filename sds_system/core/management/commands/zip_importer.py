@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.management import BaseCommand
 from pyunpack import Archive
 
-from core.models import Product, Language, Provider
+from core.models import *
 
 
 class Helper:
@@ -17,28 +17,47 @@ class Helper:
         hashed = name + '-' + provider
         return hashlib.md5(hashed.encode()).hexdigest()
 
-    def make_products(self, csv_file_path, provider, is_primary=True):
+    def make_products(self, csv_file_path, harvest, is_primary=True):
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
-                prov, _ = Provider.objects.update_or_create(name=provider, defaults={'primary': is_primary})
+                harvest_obj, _ = SDSHarvestSource.objects.update_or_create(
+                    id=harvest.lower(),
+                    defaults={
+                        'name': harvest,
+                        'primary': is_primary,
+                    }
+                )
+                harvest_obj.save()
                 lang, _ = Language.objects.get_or_create(name=row['sds_language'])
-                product, _ = Product.objects.update_or_create(
-                    id=self.hash(row['sds_pdf_product_name'], provider),
+                lang.save()
+                manufacturer, _ = Manufacturer.objects.get_or_create(name=row['sds_pdf_manufacture_name'])
+                manufacturer.save()
+
+                pdf, _ = SDS_PDF.objects.update_or_create(
+                    pdf_md5=self.hash(row['sds_pdf_product_name'], harvest_obj.id),
                     defaults={
                         'name': os.path.split(row['sds_pdf_filename_in_zip'])[1],
-                        'language': lang, 'provider': prov,
-                        'link': f"{settings.MACHINE_URL}media/sds/{provider}{row['sds_pdf_filename_in_zip']}".replace(' ', '%20'),
+                        'sds_harvest_source': harvest_obj,
+                        'from_primary': is_primary,
+                        'language': lang,
+                        'manufacturer': manufacturer,
+                        'sds_link': row['product_url'],
+                        'sds_download_url': f"{settings.MACHINE_URL}media/sds/{harvest}{row['sds_pdf_filename_in_zip']}".replace(' ', '%20'),
                         'sds_product_name': row['sds_pdf_product_name'],
                         'sds_hazards_codes': row['sds_pdf_Hazards_identification'],
-                        'sds_manufacture_name': row['sds_pdf_manufacture_name'],
-                        'crawled_at': datetime.strptime(row['crawl_date'], '%d.%m.%Y').replace(tzinfo=timezone.utc),
                         'sds_published_date': datetime.strptime(row['sds_pdf_published_date'],
                                                                 '%d.%m.%Y').replace(tzinfo=timezone.utc),
                         'sds_revision_date': datetime.strptime(row['sds_pdf_revision_date'],
-                                                               '%d.%m.%Y').replace(tzinfo=timezone.utc),
-                        'sds_url': row['product_url'],
+                                                               '%d.%m.%Y').replace(tzinfo=timezone.utc)
                     }
+                )
+                pdf.save()
+
+                product, _ = Product.objects.get_or_create(
+                        name=row['sds_pdf_product_name'],
+                        language=lang,
+                        sds_pdf=pdf
                 )
                 product.save()
 
@@ -48,18 +67,18 @@ class Command(BaseCommand, Helper):
 
     def add_arguments(self, parser):
         parser.add_argument('path', type=str, help='Path to csv zip files, that need to be extracted')
-        parser.add_argument('provider', type=str, help='Provider Name')
+        parser.add_argument('harvest', type=str, help='Harvest Name')
         parser.add_argument('--secondary', dest='is_primary', default=True, action='store_false')
 
     def handle(self, *args, **kwargs):
 
         """Extracting Target File"""
         compressed_path = kwargs['path']
-        provider = kwargs['provider']
+        harvest = kwargs['harvest']
         target_folder = self.SDS_PATH
         Archive(compressed_path).extractall(target_folder)
 
         """Reading CSV File and Putting in model"""
-        csv_file_path = os.path.join(target_folder, f"{provider}/{provider}.csv")
+        csv_file_path = os.path.join(target_folder, f"{harvest}/{harvest}.csv")
         print('csv_file_path: ', csv_file_path)
-        self.make_products(csv_file_path, provider, kwargs['is_primary'])
+        self.make_products(csv_file_path, harvest, kwargs['is_primary'])

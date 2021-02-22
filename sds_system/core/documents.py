@@ -1,13 +1,13 @@
 from django_elasticsearch_dsl import Document
 from django_elasticsearch_dsl.registries import registry
 
-from core.models import Product
+from core.models import SDS_PDF
 
 
 @registry.register_document
 class ProductDocument(Document):
     class Index:
-        name = 'products'
+        name = 'sds_pdf'
 
         # See Elasticsearch Indices API reference for available settings
         settings = {
@@ -16,13 +16,13 @@ class ProductDocument(Document):
         }
 
     class Django:
-        model = Product
+        model = SDS_PDF
 
         # The fields of the model you want to be indexed in Elasticsearch
         fields = [
             'name',
             'sds_product_name',
-            'sds_manufacture_name',
+            'manufacture__name',
         ]
 
         # Ignore auto updating of Elasticsearch when a model is saved

@@ -23,12 +23,12 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
 
-class ProviderViewSet(viewsets.ModelViewSet):
-    queryset = Provider.objects.all()
-    serializer_class = ProviderSerializer
-
-    @action(methods=['GET'], detail=False)
-    def stats(self, request):
-        obj = [{'provider': count_obj['name'], 'products': count_obj['count']}
-               for count_obj in Provider.objects.annotate(count=Count('product')).values('name', 'count')]
-        return JsonResponse(obj, safe=False)
+# class ProviderViewSet(viewsets.ModelViewSet):
+#     queryset = Provider.objects.all()
+#     serializer_class = ProviderSerializer
+#
+#     @action(methods=['GET'], detail=False)
+#     def stats(self, request):
+#         obj = [{'provider': count_obj['name'], 'products': count_obj['count']}
+#                for count_obj in Provider.objects.annotate(count=Count('product')).values('name', 'count')]
+#         return JsonResponse(obj, safe=False)
