@@ -21,6 +21,7 @@ class Helper:
         langs = []
         harvests = []
         manufacturers = []
+        product_set = set()
         pdfs = []
         products = []
         with open(csv_file_path) as csv_file:
@@ -41,8 +42,9 @@ class Helper:
                 if _:
                     manufacturers.append(manufacturer)
 
+                phash = self.hash(row['sds_pdf_product_name'], harvest_obj.id)
                 pdf, _ = SDS_PDF.objects.update_or_create(
-                    pdf_md5=self.hash(row['sds_pdf_product_name'], harvest_obj.id),
+                    pdf_md5=phash,
                     defaults={
                         'name': os.path.split(row['sds_pdf_filename_in_zip'])[1],
                         'sds_harvest_source': harvest_obj,
@@ -59,8 +61,9 @@ class Helper:
                                                                '%d.%m.%Y').replace(tzinfo=timezone.utc)
                     }
                 )
-                if _:
+                if _ and phash not in product_set:
                     pdfs.append(pdf)
+                    product_set.add(phash)
 
                 product, _ = Product.objects.get_or_create(
                         name=row['sds_pdf_product_name'],
