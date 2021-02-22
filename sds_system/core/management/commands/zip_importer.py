@@ -2,7 +2,7 @@ import csv
 import hashlib
 import os
 from datetime import datetime, timezone
-
+from tqdm import tqdm
 from django.conf import settings
 from django.core.management import BaseCommand
 from pyunpack import Archive
@@ -19,8 +19,8 @@ class Helper:
 
     def make_products(self, csv_file_path, harvest, is_primary=True):
         with open(csv_file_path) as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            for row in csv_reader:
+            csv_reader = list(csv.DictReader(csv_file))
+            for row in tqdm(csv_reader, total=len(csv_reader)):
                 harvest_obj, _ = SDSHarvestSource.objects.update_or_create(
                     id=harvest.lower(),
                     defaults={
