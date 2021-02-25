@@ -30,7 +30,7 @@ class HarvestSourceViewSet(viewsets.ModelViewSet):
     @action(methods=['GET'], detail=False)
     def stats(self, request):
         obj = [{'provider': count_obj['name'], 'products': count_obj['count']}
-               for count_obj in SDSHarvestSource.objects.annotate(count=Count('product')).values('name', 'count')]
+               for count_obj in SDSHarvestSource.objects.annotate(count=Count('sds_pdf')).values('name', 'count')]
         return JsonResponse(obj, safe=False)
 
 
