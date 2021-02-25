@@ -85,10 +85,6 @@ class UltradentParseSpider(SDSBaseParseSpider):
 class UltradentCrawlSpider(Mixin, SDSBaseCrawlSpider):
     name = Mixin.provider + '_crawl'
 
-    def __init__(self, run_by_id=None):
-        self.run_by_id = run_by_id
-        super().__init__()
-
     def start_requests(self):
         print(f"run_by: {self.run_by_id}")
         return [FormRequest(url=self.start_urls[0], formdata={'Language': 'Norwegian'}, callback=self.parse)]

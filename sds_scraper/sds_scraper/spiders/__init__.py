@@ -10,4 +10,7 @@ class SDSBaseParseSpider(Spider):
 
 
 class SDSBaseCrawlSpider(CrawlSpider):
-    pass
+
+    def __init__(self, run_by_id=None, *args, **kwargs):
+        super(SDSBaseCrawlSpider, self).__init__(*args, **kwargs)
+        self.run_by_id = run_by_id
