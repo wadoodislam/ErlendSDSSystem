@@ -34,7 +34,6 @@ https://www.digitalocean.com/community/tutorials/how-to-use-mysql-or-mariadb-wit
 
 print db list: show databases;
 
-
 https://phoenixnap.com/kb/install-elasticsearch-ubuntu
 
 ./manage.py search_index --rebuild

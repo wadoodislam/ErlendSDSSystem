@@ -25,7 +25,7 @@ SECRET_KEY = '75u%d++d)7+=@jr5*0loxqn@ilc0@j$&c$yu@1zb@zbt_&qy-l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['46.255.22.60']
+ALLOWED_HOSTS = ['46.255.22.60', '127.0.0.1']
 
 MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}:8080/'
 # Application definition
@@ -44,7 +44,7 @@ LOCAL_APPS = [
     'core',
     'phonenumber_field',
     'rest_framework',
-    'django_elasticsearch_dsl'
+    # 'django_elasticsearch_dsl'
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'netpower',
         'USER': 'netpower',
         'PASSWORD': 'FTb5vr18$%GO',
-        'HOST': 'localhost',
+        'HOST': '46.255.22.60',
         'PORT': '3306',
     }
 }

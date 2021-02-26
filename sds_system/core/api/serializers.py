@@ -13,12 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'email', 'phone_number', 'password')
 
 
-class ProviderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Provider
-        fields = '__all__'
-
-
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
@@ -38,7 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
         attr['id'] = md5hash(attr['sds_product_name'], attr['provider'])
         attr['link'] = f"{settings.MACHINE_URL}media/sds/{attr['provider']}/sds/{attr['name']}".replace(' ', '%20')
         attr['language'] = Language.objects.get(name=attr['language'])
-        attr['provider'] = Provider.objects.get(name=attr['provider'])
+        attr['sds_harvest_source'] = SDSHarvestSource.objects.get(name=attr['sds_harvest_source'])
 
         return attr
 
