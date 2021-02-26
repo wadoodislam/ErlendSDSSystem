@@ -30,7 +30,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def validate(self, attr):
         attr['id'] = md5hash(attr['sds_product_name'], attr['provider'])
-        attr['link'] = f"{settings.MACHINE_URL}media/sds/{attr['provider']}/sds/{attr['name']}".replace(' ', '%20')
+        attr['link'] = f"{settings.MACHINE_URL}:8080/media/sds/{attr['provider']}/sds/{attr['name']}".replace(' ', '%20')
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['sds_harvest_source'] = SDSHarvestSource.objects.get(name=attr['sds_harvest_source'])
 
@@ -55,3 +55,8 @@ class WishlistSerializer(serializers.ModelSerializer):
         model = Wishlist
         fields = '__all__'
 
+
+class SDSHarvestSourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SDSHarvestSource
+        fields = '__all__'

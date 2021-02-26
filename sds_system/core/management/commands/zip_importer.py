@@ -52,7 +52,7 @@ class Helper:
                         'language': lang,
                         'manufacturer': manufacturer,
                         'sds_link': row['product_url'],
-                        'sds_download_url': f"{settings.MACHINE_URL}media/sds/{harvest}{row['sds_pdf_filename_in_zip']}".replace(' ', '%20'),
+                        'sds_download_url': f"{settings.MACHINE_URL}:8080/media/sds/{harvest}{row['sds_pdf_filename_in_zip']}".replace(' ', '%20'),
                         'sds_product_name': row['sds_pdf_product_name'],
                         'sds_hazards_codes': row['sds_pdf_Hazards_identification'],
                         'sds_published_date': datetime.strptime(row['sds_pdf_published_date'],

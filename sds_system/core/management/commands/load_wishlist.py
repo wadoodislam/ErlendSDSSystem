@@ -1,6 +1,7 @@
 import csv
 
 from django.core.management import BaseCommand
+from tqdm import tqdm
 
 from core.models import Wishlist
 
@@ -13,13 +14,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         """Reading CSV File and Putting in model"""
+        wishes = []
         with open(kwargs['path'], encoding="utf8") as csv_file:
-            for row in csv.DictReader(csv_file):
-                wish, created = Wishlist.objects.get_or_create(
-                    supplier=row['SUPPLIER'], trade_name=row['TRADE_NAME'], language=row['LANGUAGE']
+            wish_rows = list(csv.DictReader(csv_file))
+            for row in tqdm(wish_rows, total=len(wish_rows)):
+                wish = Wishlist.objects.create(
+                    supplier=row.get('SUPPLIER', row['\ufeffSUPPLIER']), trade_name=row['TRADE_NAME'], language=row['LANGUAGE']
                 )
-                if created:
-                    wish.save()
+                # if created:
+                wishes.append(wish)
 
+        Wishlist.objects.bulk_create(wishes)
         print('csv_file_path: ', kwargs['path'])
 

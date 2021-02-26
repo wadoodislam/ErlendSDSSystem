@@ -1,7 +1,8 @@
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer
+from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun
 
 
 class ManufacturerAdmin(admin.ModelAdmin):
@@ -47,13 +48,31 @@ class SDSPDFAdmin(admin.ModelAdmin):
 
 
 class SDSHarvestSourceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'primary', 'status', 'type', 'method',)
-    list_filter = ('primary', 'status', 'type', 'method',)
+    list_display = ('name', 'primary', 'status', 'type', 'method', 'link_to_actions')
+    list_filter = ('primary', 'status', 'type', 'method', )
     search_fields = ['name']
+
+    def link_to_actions(self, obj):
+        if ' ' in obj.id:
+            return format_html('<a href="{}" _target="blank">Run</a>', reverse("run", args=[obj.id[:obj.id.index(' ')]]))
+        return format_html('<a href="{}" _target="blank">Run</a>', reverse("run", args=[obj.id]))
+
+
+class SDSHarvestRunAdmin(admin.ModelAdmin):
+    list_display = ('sds_harvest_source', 'run_by', 'started_at', 'ended_at', 'no_of_revision_found', 'new_sds_found')
+    list_filter = ('sds_harvest_source__name',)
+    search_fields = ['sds_harvest_source__name']
+
+    def new_sds_found(self, obj):
+        return obj.no_of_new_sds_found
+
+    def revision_found(self, obj):
+        return obj.no_of_revision_found
 
 
 admin.site.register(SDS_PDF, SDSPDFAdmin)
 admin.site.register(SDSHarvestSource, SDSHarvestSourceAdmin)
+admin.site.register(SDSHarvestRun, SDSHarvestRunAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
