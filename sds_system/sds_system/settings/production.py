@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['46.255.22.60', '127.0.0.1']
 
-MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}:8080/'
+MACHINE_URL = f'http://{ALLOWED_HOSTS[0]}'
 # Application definition
 
 INSTALLED_APPS = [

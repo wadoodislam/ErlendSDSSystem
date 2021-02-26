@@ -56,12 +56,12 @@ class SDSHarvestSource(models.Model):
     status = models.CharField(max_length=10, choices=STATUS.choices, default=STATUS.PENDING, blank=True)
     type = models.CharField(max_length=10, choices=TYPE.choices, blank=True)
     primary = models.BooleanField(default=True)
-    description = models.CharField(max_length=500, null=True)
+    description = models.CharField(max_length=500, null=True, blank=True)
     method = models.CharField(max_length=10, choices=METHOD.choices, default=METHOD.ZIP, blank=True)
     rerun_interval_days = models.IntegerField(default=1)
-    last_run_at = models.DateTimeField(null=True)
-    developer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='developer')
-    responsible_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='responsible_user')
+    last_run_at = models.DateTimeField(null=True, blank=True)
+    developer = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='developer')
+    responsible_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name='responsible_user')
     ready_for_crawling = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -75,10 +75,13 @@ class SDSHarvestRun(models.Model):
     run_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     no_of_revision_found = models.IntegerField(default=1)
     no_of_new_sds_found = models.IntegerField(default=1)
-    ended_at = models.DateTimeField(auto_now_add=True)
-    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField(null=True)
+    started_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.sds_harvest_source} ({self.id})'
 
 
 class Manufacturer(models.Model):
