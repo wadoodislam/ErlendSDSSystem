@@ -1,15 +1,15 @@
 from datetime import datetime
 
 import requests
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from elasticsearch_dsl import Q
 
-# from core.documents import ProductDocument
+from core.documents import SDSDocument, ManufacturerDocument
 from core.forms import MatchForm
 from core.models import *
-from django.conf import settings
 
 
 def dashboard_with_pivot(request):
@@ -29,12 +29,19 @@ def match(request, id):
         supplier = form.cleaned_data['supplier']
         trade_name = form.cleaned_data['trade_name']
 
-    if trade_name and supplier:
-        query = Q("match", sds_product_name=trade_name) & Q("match", sds_manufacture_name=supplier)
-    else:
-        query = Q("match", sds_product_name=trade_name) | Q("match", sds_manufacture_name=supplier)
-    matches = [] #ProductDocument.search().query(query).to_queryset()
-    products = matches.values('name', 'sds_product_name', 'sds_manufacture_name', 'link', "id")
+    query = {}
+
+    if supplier:
+        q_set = ManufacturerDocument.search().query(Q("match", name=supplier))
+        # query['manufacturer.id'] = list(map(lambda x:str(x), q_set.to_queryset().values_list('id', flat=True)))
+        # matches = matches.filter(manufacturer__name__contains=supplier)
+
+    if trade_name:
+        query['sds_product_name'] = trade_name
+
+    matches = SDSDocument.search().query(Q("match", **query)).to_queryset()
+
+    products = matches.values('name', 'sds_product_name', 'manufacturer__name', 'sds_link', "pdf_md5")
     return render(request, 'core/match.html', {'products': products, "wish": wish, 'form': form})
 
 
@@ -59,7 +66,7 @@ def run_harvest(request, id):
 def pair(request, wishlist_id):
     product_id = request.POST['match']
     wishlist = Wishlist.objects.get(id=wishlist_id)
-    wishlist.product = Product.objects.get(id=product_id)
+    wishlist.sds_pdf = SDS_PDF.objects.get(pdf_md5=product_id)
     wishlist.matched = True
     wishlist.save()
     return redirect('/admin/core/wishlist/')

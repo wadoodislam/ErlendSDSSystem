@@ -44,7 +44,7 @@
                             <td>{{ product.sds_manufacture_name }}</td>
                             <td><a href="{{ product.link }}" target="_blank">PDF</a></td>
                             <td>
-                                <input type="radio" name="match" value={{ product.id }}>
+                                <input type="radio" name="match" value={{ product.pdf_md5 }}>
                             </td>
                         </tr>
                     {% endfor %}

@@ -17,7 +17,7 @@ class WishlistAdmin(admin.ModelAdmin):
 
     def match(self, obj):
         if obj.matched:
-            return format_html(f'<a href="{obj.product.link}" target="_blank">{obj.product.sds_product_name}</a>')
+            return format_html(f'<a href="{obj.sds_pdf.sds_link}" target="_blank">{obj.sds_pdf.sds_product_name}</a>')
         else:
             return format_html(f'<a href="/core/match/{obj.id}" target="_blank">Suggest</a>')
 

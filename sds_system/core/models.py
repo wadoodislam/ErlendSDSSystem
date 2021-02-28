@@ -29,7 +29,7 @@ class Wishlist(models.Model):
     trade_name = models.CharField(max_length=100)
     language = models.CharField(max_length=30)
     matched = models.BooleanField(default=False)
-    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL)
+    sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
