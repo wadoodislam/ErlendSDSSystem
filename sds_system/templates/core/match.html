@@ -56,7 +56,14 @@
 
             <input id="submit_button" class="right" type="submit" value="Submit">
             </form>
+            <h2>Manual SDS Upload</h2>
+            <form action="upload/{{ wish.id }}" method="post">
+                {% csrf_token %}
+                {{ upload_form }}
+                <input type="submit" value="Upload">
+            </form>
 
+            <a href="/admin/core/sdsharvestsource/add/" target="_blank">Add New Harvest Source</a>
         </div>
     {% endblock %}
 

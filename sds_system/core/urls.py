@@ -7,5 +7,6 @@ urlpatterns = [
     path('harvest/run/<slug:id>', run_harvest, name='run'),
     path('match/<int:id>', match, name='match'),
     path('match/pair/<int:wishlist_id>', pair, name='pair'),
+    path('match/upload/<int:wishlist_id>', upload, name='upload'),
 ]
 

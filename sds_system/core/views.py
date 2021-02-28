@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from elasticsearch_dsl import Q
 
 from core.documents import SDSDocument, ManufacturerDocument
-from core.forms import MatchForm
+from core.forms import MatchForm, SDSFileForm
 from core.models import *
 
 
@@ -24,7 +24,7 @@ def match(request, id):
     wish = Wishlist.objects.filter(id=id).values("id", 'supplier', 'trade_name', 'language')[0]
 
     form = MatchForm(request.POST) if request.method == 'POST' else MatchForm(wish)
-
+    upload_form = SDSFileForm()
     if form.is_valid():
         supplier = form.cleaned_data['supplier']
         trade_name = form.cleaned_data['trade_name']
@@ -42,7 +42,7 @@ def match(request, id):
     matches = SDSDocument.search().query(Q("match", **query)).to_queryset()
 
     products = matches.values('name', 'sds_product_name', 'manufacturer__name', 'sds_link', "pdf_md5")
-    return render(request, 'core/match.html', {'products': products, "wish": wish, 'form': form})
+    return render(request, 'core/match.html', {'products': products, "wish": wish, 'form': form, 'upload_form': upload_form})
 
 
 @login_required
@@ -67,6 +67,17 @@ def pair(request, wishlist_id):
     product_id = request.POST['match']
     wishlist = Wishlist.objects.get(id=wishlist_id)
     wishlist.sds_pdf = SDS_PDF.objects.get(pdf_md5=product_id)
+    wishlist.matched = True
+    wishlist.save()
+    return redirect('/admin/core/wishlist/')
+
+
+def upload(request, wishlist_id):
+    url = request.POST.get('url', None)
+    file = request.FILES.get('file', None)
+    wishlist = Wishlist.objects.get(id=wishlist_id)
+
+    # wishlist.manual =
     wishlist.matched = True
     wishlist.save()
     return redirect('/admin/core/wishlist/')
