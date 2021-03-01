@@ -77,7 +77,7 @@ ITEM_PIPELINES = {
     'sds_scraper.pipelines.SDSExtractorPipeline': 100,
     'sds_scraper.pipelines.SDSDatabasePipeline': 200,
 }
-FILES_STORE = f'~/ErlendSDSSystem/sds_system/media/sds/'
+FILES_STORE = f'ErlendSDSSystem/sds_system/media/sds/'
 SERVER_ADDRESS = 'http://46.255.22.60:8080'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
