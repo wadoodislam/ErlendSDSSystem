@@ -86,7 +86,7 @@ class SDSHarvestRun(models.Model):
 
 class Manufacturer(models.Model):
     name = models.CharField(max_length=100)
-    alias = models.ForeignKey('Manufacturer', null=True, on_delete=models.PROTECT)
+    alias = models.ForeignKey('Manufacturer', null=True, on_delete=models.PROTECT, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -123,7 +123,7 @@ class SDS_PDF(models.Model):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT)
 
     sds_link = models.URLField()
-    sds_download_url = models.URLField()
+    sds_download_url = models.URLField(null=True)
     sds_product_name = models.CharField(max_length=100)
     sds_hazards_codes = models.CharField(max_length=250, blank=True, null=True)
 

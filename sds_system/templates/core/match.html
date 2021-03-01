@@ -1,10 +1,7 @@
-<head>
-  <meta charset="UTF-8">
-  <title>Search</title>
+{% extends 'base.html' %}
 
-</head>
-<body>
-    {% block content %}
+
+{% block content %}
     <style>
         table, th, td {
           border: 1px solid black;
@@ -65,6 +62,5 @@
 
             <a href="/admin/core/sdsharvestsource/add/" target="_blank">Add New Harvest Source</a>
         </div>
-    {% endblock %}
+{% endblock %}
 
-</body>

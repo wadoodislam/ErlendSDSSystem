@@ -1,10 +1,6 @@
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard with Flexmonster</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+{% extends 'base.html' %}
 
-</head>
-<body>
+{% block content %}
     <style>
         table, th, td {
           border: 1px solid black;
@@ -32,7 +28,7 @@
             </tbody>
         </table>
 
-    {% block content %}
+    {% block chart %}
       <div id="container" style="width: 75%;">
         <canvas id="pie-chart"></canvas>
       </div>
@@ -63,6 +59,6 @@
 
       </script>
 
-    {% endblock %}
+    {% endblock chart %}
+{% endblock content %}
 
-</body>

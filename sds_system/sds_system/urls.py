@@ -21,7 +21,7 @@ from django.urls import path, include
 from core.views import dashboard_with_pivot
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('core/', include('core.urls')),
     path('accounts/', include('accounts.urls')),
     path('', dashboard_with_pivot, name='dashboard_with_pivot'),

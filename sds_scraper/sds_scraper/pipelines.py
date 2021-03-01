@@ -29,14 +29,13 @@ class FileDownloadPipeline(FilesPipeline):
 class BoilerplatePipeline:
 
     def process_item(self, item, spider):
-        item['provider'] = spider.provider
-        item['manufacturer_name'] = spider.manufacturer
-        item['source'] = spider.source
+        item['sds_harvest_source'] = spider.provider
         item['crawled_at'] = str(datetime.now())
         item['sds_path'] = item['files'][0]['path']
         item['sds_status'] = item['files'][0]['status']
-        item['sds_url'] = item['files'][0]['url']
+        item['sds_link'] = item['files'][0]['url']
         item['language'] = 'nb'
+        item['pdf_md5'] = 'garbage_value'
         return item
 
 
@@ -80,7 +79,7 @@ class SDSHazardCodeExtractorPipeline:
         self.HAZARD_CODE_PATTERN = getattr(spider, 'HAZARD_CODE_PATTERN', self.HAZARD_CODE_PATTERN)
         raw_codes = self.__hazard_section(item)
         raw_codes = '+'.join([part.strip() for part in raw_codes.split('+')])
-        item['sds_Hazards_identification'] = ','.join(sorted(set(re.findall(self.HAZARD_CODE_PATTERN, raw_codes))))
+        item['sds_hazards_codes'] = ','.join(sorted(set(re.findall(self.HAZARD_CODE_PATTERN, raw_codes))))
         return item
 
     def __hazard_section(self, item):
@@ -103,7 +102,7 @@ class SDSManufactureExtractorPipeline:
         raw_manfacturer = item['pdf_text']
         for strategy in self.MANUFACTURE_STRATEGIES:
             raw_manfacturer = Strategies().apply_strategy(strategy, raw_manfacturer)
-        item['sds_manufacture_name'] = raw_manfacturer
+        item['manufacturer'] = raw_manfacturer
         return item
 
 
@@ -137,11 +136,14 @@ class SDSExtractorPipeline:
         item.pop('pdf_squashed')
         item.pop('files')
         item.pop('file_urls')
+        item.pop('sds_status')
+        item.pop('sds_path')
+        item.pop('crawled_at')
         return item
 
 
 class SDSDatabasePipeline:
-    url = settings.get('SERVER_ADDRESS') + '/core/api/product/'
+    url = settings.get('SERVER_ADDRESS') + '/core/api/sds/'
     headers = {'Content-type': 'application/json', 'Accept': '*/*'}
 
     def process_item(self, item, spider):
