@@ -8,6 +8,7 @@ from ..items import SdsScraperItem
 class Mixin:
     provider = 'tonne_dental'
     manufacturer = 'Tonne Dental'
+    language = 'nb'
     source = os.path.basename(__file__)
     start_urls = ['https://www.tonnedental.no/datablader/']
     Relevant_Splitter = re.compile(r'AVSNITT|IDENTIFISERING')

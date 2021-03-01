@@ -10,6 +10,7 @@ from ..items import SdsScraperItem
 class Mixin:
     provider = 'kulzer'
     manufacturer = 'Kulzer'
+    language = 'nb'
     source = os.path.basename(__file__)
     start_urls = ['https://www.kulzer.com/en/int/downloads_5/downloads.aspx']
 

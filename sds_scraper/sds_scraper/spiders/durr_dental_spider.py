@@ -12,6 +12,7 @@ from ..items import SdsScraperItem
 class Mixin:
     provider = 'durr_dental'
     manufacturer = 'DÜRR DENTAL SE'
+    language = 'nb'
     source = os.path.basename(__file__)
     start_urls = ['https://www.duerrdental.com/fileadmin/assets/apps/dlc/DlcProxy.php']
     base_url = 'https://www.duerrdental.com/en/services/download-centre/'

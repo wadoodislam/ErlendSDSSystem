@@ -114,7 +114,7 @@ class SDS_PDF(models.Model):
         verbose_name = "sds pdf"
 
     name = models.CharField(max_length=100)
-    sds_harvest_run = models.ForeignKey(SDSHarvestRun, models.SET_NULL, null=True)
+    sds_harvest_run = models.ForeignKey(SDSHarvestRun, null=True, on_delete=models.SET_NULL,)
     sds_harvest_source = models.ForeignKey(SDSHarvestSource, models.PROTECT)
     pdf_md5 = models.CharField(primary_key=True, null=False, max_length=32, editable=False)
     from_primary = models.BooleanField(default=True)

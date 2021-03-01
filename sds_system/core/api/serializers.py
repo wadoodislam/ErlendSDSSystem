@@ -25,33 +25,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        # depth = 1
         fields = '__all__'
-
-    # def validate(self, attr):
-    #     attr['id'] = md5hash(attr['sds_product_name'], attr['provider'])
-    #     attr['link'] = f"{settings.MACHINE_URL}:8080/media/sds/{attr['provider']}/sds/{attr['name']}".replace(' ', '%20')
-    #     attr['language'] = Language.objects.get(name=attr['language'])
-    #     attr['sds_harvest_source'] = SDSHarvestSource.objects.get(name=attr['sds_harvest_source'])
-    #
-    #     return attr
-    #
-    # def create(self, validated_data):
-    #     instance = Product.objects.filter(id=validated_data['id'])
-    #     if instance.exists():
-    #         return self.update(instance[0], validated_data)
-    #
-    #     return super().create(validated_data)
 
 
 class SDSPDFSerializer(serializers.ModelSerializer):
     language = serializers.CharField(max_length=100)
     manufacturer = serializers.CharField(max_length=100)
-    sds_harvest_source = serializers.CharField(max_length=100)
 
     class Meta:
         model = SDS_PDF
-        depth = 1
         fields = '__all__'
 
     def validate(self, attr):
@@ -59,8 +41,6 @@ class SDSPDFSerializer(serializers.ModelSerializer):
         attr['sds_download_url'] = f"{settings.MACHINE_URL}:8080/media/sds/{attr['sds_harvest_source']}/sds/{attr['name']}".replace(' ', '%20')
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['manufacturer'] = Manufacturer.objects.get(name=attr['manufacturer'])
-        attr['sds_harvest_source'] = SDSHarvestSource.objects.get(name=attr['sds_harvest_source'])
-        attr['sds_harvest_run'] = SDSHarvestRun.objects.get(sds_harvest_source=attr['sds_harvest_source'])
 
         return attr
 

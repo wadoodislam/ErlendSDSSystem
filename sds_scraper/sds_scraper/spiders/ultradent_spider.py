@@ -10,6 +10,7 @@ from ..items import SdsScraperItem
 class Mixin:
     provider = 'ultradent'
     manufacturer = 'Ultradent Products, Inc'
+    language = 'nb'
     source = os.path.basename(__file__)
     start_urls = ['https://www.ultradent.com/resources/safety-data-sheets']
 

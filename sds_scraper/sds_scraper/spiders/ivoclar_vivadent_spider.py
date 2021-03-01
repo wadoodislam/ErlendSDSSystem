@@ -10,6 +10,7 @@ from ..items import SdsScraperItem
 class Mixin:
     provider = 'ivoclar_vivadent'
     manufacturer = 'Ivoclar Vivadent AG'
+    language = 'nb'
     source = os.path.basename(__file__)
     start_urls = ['https://www.ivoclarvivadent.se/sv/skerhetsdatablad/']
 

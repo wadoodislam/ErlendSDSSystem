@@ -15,7 +15,6 @@ class SdsScraperItem(scrapy.Item):
     date = scrapy.Field()
     document_type = scrapy.Field()
     file_type = scrapy.Field()
-    crawled_at = scrapy.Field()
     provider = scrapy.Field()
     language = scrapy.Field()
 
@@ -28,7 +27,7 @@ class SdsScraperItem(scrapy.Item):
     sds_link = scrapy.Field()
     sds_path = scrapy.Field()
     sds_harvest_source = scrapy.Field()
-
+    sds_harvest_run = scrapy.Field()
     raw_pdf_text = scrapy.Field()
     pdf_squashed = scrapy.Field()
     pdf_text = scrapy.Field()
