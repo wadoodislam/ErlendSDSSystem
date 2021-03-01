@@ -46,6 +46,12 @@ class SDSPDFSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         instance = SDS_PDF.objects.filter(pdf_md5=validated_data['pdf_md5'])
+
+        if instance.exists():
+            instance = self.update(instance[0], validated_data)
+        else:
+            instance = super().create(validated_data)
+
         product, _ = Product.objects.get_or_create(sds_pdf=instance,
                                                    defaults={'name': instance.sds_product_name,
                                                              'language': instance.language})
@@ -53,10 +59,7 @@ class SDSPDFSerializer(serializers.ModelSerializer):
             product.name = instance.sds_product_name
             product.save()
 
-        if instance.exists():
-            return self.update(instance[0], validated_data)
-
-        return super().create(validated_data)
+        return instance
 
 
 class SDSHarvestSourceSerializer(serializers.ModelSerializer):
