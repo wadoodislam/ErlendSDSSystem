@@ -38,7 +38,8 @@ class SDSPDFSerializer(serializers.ModelSerializer):
 
     def validate(self, attr):
         attr['pdf_md5'] = md5hash(attr['sds_product_name'], attr['sds_harvest_source'])
-        attr['sds_download_url'] = f"{settings.MACHINE_URL}:8080/media/sds/{attr['sds_harvest_source'].id}/sds/{attr['name']}".replace(' ', '%20')
+        attr['sds_download_url'] = f"{settings.MACHINE_URL}:8080/media/sds/{attr['sds_harvest_source'].id}" \
+                                   f"/sds/{attr['name']}".replace(' ', '%20')
         attr['language'] = Language.objects.get(name=attr['language'])
         attr['manufacturer'] = Manufacturer.objects.get(name=attr['manufacturer'])
 
@@ -57,8 +58,8 @@ class SDSPDFSerializer(serializers.ModelSerializer):
                                                              'language': instance.language})
         if not _ and product.name != instance.sds_product_name:
             product.name = instance.sds_product_name
-            product.save()
 
+        product.save()
         return instance
 
 
