@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.shortcuts import render, redirect
 from elasticsearch_dsl import Q
 
-from core.documents import SDSDocument, ManufacturerDocument
+from core.documents import ManufacturerDocument, SDSDocument
 from core.forms import MatchForm
 from core.models import *
 

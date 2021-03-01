@@ -34,6 +34,9 @@ class HarvestSourceViewSet(viewsets.ModelViewSet):
         return JsonResponse(obj, safe=False)
 
 
+class SDSPDFViewSet(viewsets.ModelViewSet):
+    queryset = SDS_PDF.objects.all()
+    serializer_class = SDSPDFSerializer
 
 # python manage.py zip_importer ~/2020nov_primary/fishersci
 
