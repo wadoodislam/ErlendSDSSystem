@@ -90,6 +90,9 @@ class Manufacturer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "SDS Producer"
+
     def __str__(self):
         return self.name
 
@@ -113,7 +116,7 @@ class SDS_PDF(models.Model):
     name = models.CharField(max_length=100)
     sds_harvest_run = models.ForeignKey(SDSHarvestRun, models.SET_NULL, null=True)
     sds_harvest_source = models.ForeignKey(SDSHarvestSource, models.PROTECT)
-    pdf_md5 = models.CharField(primary_key=True, max_length=32)
+    pdf_md5 = models.CharField(primary_key=True, null=False, max_length=32, editable=False)
     from_primary = models.BooleanField(default=True)
 
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)

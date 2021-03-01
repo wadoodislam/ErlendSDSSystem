@@ -54,8 +54,8 @@ class SDSHarvestSourceAdmin(admin.ModelAdmin):
 
     def link_to_actions(self, obj):
         if ' ' in obj.id:
-            return format_html('<a href="{}" _target="blank">Run</a>', reverse("run", args=[obj.id[:obj.id.index(' ')]]))
-        return format_html('<a href="{}" _target="blank">Run</a>', reverse("run", args=[obj.id]))
+            return format_html('<a href="{}" target="_blank">Run</a>', reverse("run", args=[obj.id[:obj.id.index(' ')]]))
+        return format_html('<a href="{}" target="_blank">Run</a>', reverse("run", args=[obj.id]))
 
 
 class SDSHarvestRunAdmin(admin.ModelAdmin):
