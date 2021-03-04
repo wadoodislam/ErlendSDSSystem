@@ -19,11 +19,11 @@ class Command(BaseCommand):
         with open(kwargs['path'], encoding="utf8") as csv_file:
             url_rows = list(csv.DictReader(csv_file, fieldnames=['url']))
             for row in tqdm(url_rows, total=len(url_rows)):
-                url_import = SDSURLImport.objects.create(
-                    link_to_pdf=row.get('url', row['url']), domain=urlparse(row.get('url', row['url'])).netloc
-                )
-
-                url_import.save()
+                if not row['url']:
+                    continue
+                SDSURLImport.objects.create(
+                    link_to_pdf=row['url'], domain=urlparse(row['url']).netloc
+                ).save()
 
         print('csv_file_path: ', kwargs['path'])
 
