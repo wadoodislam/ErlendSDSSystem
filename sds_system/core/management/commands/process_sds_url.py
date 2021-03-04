@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         """Downloading Manually imported SDS and Putting in model"""
         for manual_sds in SDSURLImport.objects.all():
-            if not manual_sds.isProcessed:
+            if not manual_sds.is_processed:
                 myfile = requests.get(url=manual_sds.link_to_pdf, allow_redirects=True)
                 open(f"{self.path}file{manual_sds.id}.pdf", 'wb').write(myfile.content)
 
@@ -27,5 +27,5 @@ class Command(BaseCommand):
                 pdf.save()
 
                 manual_sds.sds_pdf = pdf
-                manual_sds.isProcessed = True
+                manual_sds.is_processed = True
                 manual_sds.save()

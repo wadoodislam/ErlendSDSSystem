@@ -81,7 +81,7 @@ class SDSHarvestRunAdmin(admin.ModelAdmin):
 
 
 class SDSURLImportAdmin(admin.ModelAdmin):
-    list_display = ('domain', 'isProcessed', 'sds_pdf')
+    list_display = ('domain', 'is_processed', 'sds_pdf')
     search_fields = ['domain', 'sds_pdf']
 
 

@@ -145,6 +145,6 @@ class SDS_PDF(models.Model):
 class SDSURLImport(models.Model):
     link_to_pdf = models.URLField()
     domain = models.CharField(max_length=100)
-    isProcessed = models.BooleanField(null=True)
+    is_processed = models.BooleanField(null=True)
     language = models.CharField(max_length=100)
     sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
