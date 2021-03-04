@@ -15,6 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         """Reading CSV File and Putting in model"""
+
         with open(kwargs['path'], encoding="utf8") as csv_file:
             url_rows = list(csv.DictReader(csv_file, fieldnames=['url']))
             for row in tqdm(url_rows, total=len(url_rows)):

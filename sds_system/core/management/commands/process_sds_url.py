@@ -6,14 +6,14 @@ from core.utils import md5hash
 
 class Command(BaseCommand):
     help = 'Command to process sds urls'
-    path = "H:/PyCharm Projects/ErlendSDSSystem/sds_system/media/sds/manual/"
+    path = "media/sds/manual"
 
     def handle(self, *args, **kwargs):
         """Downloading Manually imported SDS and Putting in model"""
         for manual_sds in SDSURLImport.objects.all():
             if not manual_sds.is_processed:
                 myfile = requests.get(url=manual_sds.link_to_pdf, allow_redirects=True)
-                open(f"{self.path}file{manual_sds.id}.pdf", 'wb').write(myfile.content)
+                open(f"{self.path}/file{manual_sds.id}.pdf", 'wb').write(myfile.content)
 
                 pdf = SDS_PDF.objects.create(
                     name=f'file{manual_sds.id}',
