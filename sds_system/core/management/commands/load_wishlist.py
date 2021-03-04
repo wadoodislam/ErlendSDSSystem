@@ -19,7 +19,7 @@ class Command(BaseCommand):
             wish_rows = list(csv.DictReader(csv_file))
             for row in tqdm(wish_rows, total=len(wish_rows)):
                 wish = Wishlist.objects.create(
-                    supplier=row.get('SUPPLIER', row['\ufeffSUPPLIER']), trade_name=row['TRADE_NAME'], language=row['LANGUAGE']
+                    supplier=row.get('SUPPLIER', row['SUPPLIER']), trade_name=row['TRADE_NAME'], language=row['LANGUAGE']
                 )
                 # if created:
                 wishes.append(wish)

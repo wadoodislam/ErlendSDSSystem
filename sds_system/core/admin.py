@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun
+from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun, SDSURLImport
 
 
 class ManufacturerAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ class ManufacturerAdmin(admin.ModelAdmin):
 
 
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ('trade_name', 'supplier', 'language', 'matched', 'match')
+    list_display = ('trade_name', 'supplier', 'revision_date', 'matched', 'match', 'manufacturer_name', 'product_name', 'revision_date')
     list_filter = ('matched',)
     search_fields = ['supplier', 'trade_name', ]
 
@@ -20,6 +20,16 @@ class WishlistAdmin(admin.ModelAdmin):
             return format_html(f'<a href="{obj.sds_pdf.sds_link}" target="_blank">{obj.sds_pdf.sds_product_name}</a>')
         else:
             return format_html(f'<a href="/core/match/{obj.id}" target="_blank">Suggest</a>')
+
+    def manufacturer_name(self, obj):
+        return str(obj.sds_pdf.manufacturer)
+
+    def product_name(self, obj):
+        return str(obj.sds_pdf.sds_product_name)
+
+    def revision_date(self, obj):
+        return str(obj.sds_pdf.sds_revision_date)
+
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -70,10 +80,16 @@ class SDSHarvestRunAdmin(admin.ModelAdmin):
         return obj.no_of_revision_found
 
 
+class SDSURLImportAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'isProcessed', 'sds_pdf')
+    search_fields = ['domain', 'sds_pdf']
+
+
 admin.site.register(SDS_PDF, SDSPDFAdmin)
 admin.site.register(SDSHarvestSource, SDSHarvestSourceAdmin)
 admin.site.register(SDSHarvestRun, SDSHarvestRunAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Manufacturer, ManufacturerAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
+admin.site.register(SDSURLImport, SDSURLImportAdmin)
 admin.site.register(Language)

@@ -32,6 +32,7 @@ class Wishlist(models.Model):
     sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    revision_date = models.DateField(blank=True, null=True)
 
 # Erlend Models
 
@@ -120,11 +121,11 @@ class SDS_PDF(models.Model):
     from_primary = models.BooleanField(default=True)
 
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
-    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, null=True)
 
     sds_link = models.URLField()
     sds_download_url = models.URLField(null=True)
-    sds_product_name = models.CharField(max_length=100)
+    sds_product_name = models.CharField(max_length=100, null=True)
     sds_hazards_codes = models.CharField(max_length=250, blank=True, null=True)
 
     sds_print_date = models.DateField(blank=True, null=True)
@@ -135,5 +136,15 @@ class SDS_PDF(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    manual = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
+
+
+class SDSURLImport(models.Model):
+    link_to_pdf = models.URLField()
+    domain = models.CharField(max_length=100)
+    isProcessed = models.BooleanField(null=True)
+    language = models.CharField(max_length=100)
+    sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
