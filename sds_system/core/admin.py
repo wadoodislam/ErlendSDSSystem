@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun, SDSURLImport
+from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun, SDSURLImport, \
+    IgnoreDomain
 
 
 class ManufacturerAdmin(admin.ModelAdmin):
@@ -86,7 +87,13 @@ class SDSURLImportAdmin(admin.ModelAdmin):
     list_filter = ('is_processed', 'is_downloaded', 'is_sds', 'is_duplicate', 'download_failed',)
 
 
+class IgnoreDomainAdmin(admin.ModelAdmin):
+    list_display = ('domain', 'reason')
+    search_fields = ['domain', 'reason']
+
+
 admin.site.register(SDS_PDF, SDSPDFAdmin)
+admin.site.register(IgnoreDomain, IgnoreDomainAdmin)
 admin.site.register(SDSHarvestSource, SDSHarvestSourceAdmin)
 admin.site.register(SDSHarvestRun, SDSHarvestRunAdmin)
 admin.site.register(Product, ProductAdmin)

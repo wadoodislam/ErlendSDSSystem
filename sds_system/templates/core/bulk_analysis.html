@@ -14,7 +14,15 @@
         margin-left: 20px;
     }
     </style>
-    <h1>Run Harvest</h1>
+    <h1>Count Range Filter</h1>
+    <form method="get">
+        <label for="min">Min Bound</label>
+        <input name="min" type="number"/>
+        <label for="max">Max Bound</label>
+        <input name="max" type="number"/>
+        <input type="submit"/>
+    </form>
+    <h1>Domain Counts</h1>
+    {{ analysis|safe }}
 
 {% endblock %}
-

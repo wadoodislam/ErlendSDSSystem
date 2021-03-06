@@ -13,6 +13,7 @@ pdfminer==20191125
 
 mysqlclient==2.0.1
 tqdm
+json2html
 elasticsearch<7.0.0,>=6.0.0
 elasticsearch-dsl>=6.4.0,<7.0.0
 django-elasticsearch-dsl>=6.0.0,<7.0.0

@@ -22,8 +22,8 @@ from core.views import dashboard_with_pivot
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('core/', include('core.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('core/', include(('core.urls', 'core'), namespace='core')),
+    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('', dashboard_with_pivot, name='dashboard_with_pivot'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

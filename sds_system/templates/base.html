@@ -16,18 +16,20 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
      {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard_with_pivot' %}">Stats</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/admin">Admin Panel</a>
-      </li>
-      </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard_with_pivot' %}">Stats</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Admin Panel</a>
+          </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:analysis' %}">Analysis</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/admin/logout">Logout</a>
           </li>
         {% else %}
-            <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'login' %}">Login</a>
           </li>
         {% endif %}

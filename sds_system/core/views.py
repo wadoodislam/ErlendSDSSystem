@@ -5,7 +5,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from elasticsearch_dsl import Q
+from json2html import Json2Html
 
 from core.documents import SDSDocument, ManufacturerDocument
 from core.forms import MatchForm, SDSFileForm
@@ -61,6 +63,24 @@ def run_harvest(request, id):
         harvest.save()
 
     return render(request, 'core/run_harvest.html', {'harvest': harvest, "run": run})
+
+
+@login_required
+def bulk_analysis(request):
+    minc, maxc = request.GET.get('min', None), request.GET.get('max', None)
+    query = {}
+    if maxc: query['count__lt'] = maxc
+    if minc: query['count__gt'] = minc
+    ignored_domains = IgnoreDomain.objects.values_list('domain', flat=True)
+    analysis = list(SDSURLImport.objects.values('domain').exclude(domain__in=ignored_domains).annotate(
+        count=Count('domain')
+    ).filter(**query).order_by('-count').values('domain', 'count'))
+
+    for item in analysis:
+        item['Domain Actions'] = f'<a href="{reverse("admin:core_sdsharvestsource_add")}?id={item["domain"]}&method=Scraping" target="_blank">Add</a>' \
+                         f' | <a href="{reverse("admin:core_ignoredomain_add")}?domain={item["domain"]}" target="_blank">Ignore</a>'
+
+    return render(request, 'core/bulk_analysis.html', {'analysis': Json2Html().convert(json=analysis, escape=False)})
 
 
 def pair(request, wishlist_id):

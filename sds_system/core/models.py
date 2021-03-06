@@ -155,10 +155,10 @@ class SDSURLImport(models.Model):
     is_duplicate = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "pdf_bulk_import_links"
+        verbose_name = "PDF Bulk Import Link"
 
 
-class IgnoreDomains(models.Model):
+class IgnoreDomain(models.Model):
     domain = models.CharField(max_length=100)
     reason = models.CharField(max_length=250, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
