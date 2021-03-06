@@ -57,7 +57,7 @@ class SDSPDFAdmin(admin.ModelAdmin):
 
 
 class SDSHarvestSourceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'primary', 'status', 'type', 'method', 'link_to_actions')
+    list_display = ('name', 'primary', 'status', 'method', 'last_run_at', 'link_to_actions')
     list_filter = ('primary', 'status', 'type', 'method', )
     search_fields = ['name']
 
@@ -83,7 +83,6 @@ class SDSURLImportAdmin(admin.ModelAdmin):
     list_display = ('domain', 'is_processed','is_downloaded', 'is_sds', 'is_duplicate', 'download_failed', 'sds_pdf',)
     search_fields = ['domain', 'sds_pdf']
     list_filter = ('is_processed', 'is_downloaded', 'is_sds', 'is_duplicate', 'download_failed',)
-
 
 
 admin.site.register(SDS_PDF, SDSPDFAdmin)
