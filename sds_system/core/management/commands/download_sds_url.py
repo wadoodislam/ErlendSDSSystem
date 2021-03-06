@@ -38,3 +38,6 @@ class Command(BaseCommand):
                 print("Error:")
                 print(manual_sds.id, manual_sds.domain, e, sep=' | ')
                 print(manual_sds.link_to_pdf)
+                manual_sds.download_failed = True
+
+            manual_sds.save()
