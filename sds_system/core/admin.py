@@ -81,9 +81,9 @@ class SDSHarvestRunAdmin(admin.ModelAdmin):
 
 
 class SDSURLImportAdmin(admin.ModelAdmin):
-    list_display = ('domain', 'is_processed', 'sds_pdf')
+    list_display = ('domain', 'is_processed','is_downloaded', 'is_sds', 'is_duplicate', 'download_failed', 'sds_pdf',)
     search_fields = ['domain', 'sds_pdf']
-    list_filter = ('is_processed', 'is_downloaded', 'is_sds', 'is_duplicate')
+    list_filter = ('is_processed', 'is_downloaded', 'is_sds', 'is_duplicate', 'download_failed',)
 
 
 
