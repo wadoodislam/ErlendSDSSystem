@@ -65,6 +65,10 @@ def run_harvest(request, id):
     return render(request, 'core/run_harvest.html', {'harvest': harvest, "run": run})
 
 
+def slugify(domain):
+    pass
+
+
 @login_required
 def bulk_analysis(request):
     minc, maxc = request.GET.get('min', None), request.GET.get('max', None)
@@ -77,7 +81,7 @@ def bulk_analysis(request):
     ).filter(**query).order_by('-count').values('domain', 'count'))
 
     for item in analysis:
-        item['Domain Actions'] = f'<a href="{reverse("admin:core_sdsharvestsource_add")}?id={item["domain"]}&method=Scraping" target="_blank">Add</a>' \
+        item['Domain Actions'] = f'<a href="{reverse("admin:core_sdsharvestsource_add")}?id={slugify(item["domain"])}&method=Scraping" target="_blank">Add</a>' \
                          f' | <a href="{reverse("admin:core_ignoredomain_add")}?domain={item["domain"]}" target="_blank">Ignore</a>'
 
     return render(request, 'core/bulk_analysis.html', {'analysis': Json2Html().convert(json=analysis, escape=False)})

@@ -51,6 +51,7 @@ class SDSHarvestSource(models.Model):
     class METHOD(models.TextChoices):
         SCRAPING = 'Scraping'
         ZIP = 'Zip'
+        URL_BULK = 'URL BULK'
 
     id = models.CharField(max_length=100, primary_key=True)
     name = models.CharField(max_length=100)
