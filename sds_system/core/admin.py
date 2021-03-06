@@ -11,7 +11,7 @@ class ManufacturerAdmin(admin.ModelAdmin):
 
 
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ('trade_name', 'supplier', 'revision_date', 'matched', 'match', 'manufacturer_name', 'product_name', 'revision_date')
+    list_display = ('trade_name', 'supplier', 'revision_date', 'matched', 'match', 'manufacturer_name', 'product_name', 'sds_revision_date')
     list_filter = ('matched',)
     search_fields = ['supplier', 'trade_name', ]
 
@@ -22,14 +22,13 @@ class WishlistAdmin(admin.ModelAdmin):
             return format_html(f'<a href="/core/match/{obj.id}" target="_blank">Suggest</a>')
 
     def manufacturer_name(self, obj):
-        return str(obj.sds_pdf.manufacturer)
+        return str(obj.sds_pdf.manufacturer) if obj.sds_pdf else None
 
     def product_name(self, obj):
-        return str(obj.sds_pdf.sds_product_name)
+        return str(obj.sds_pdf.sds_product_name) if obj.sds_pdf else None
 
-    def revision_date(self, obj):
-        return str(obj.sds_pdf.sds_revision_date)
-
+    def sds_revision_date(self, obj):
+        return str(obj.sds_pdf.sds_revision_date) if obj.sds_pdf else None
 
 
 class ProductAdmin(admin.ModelAdmin):
