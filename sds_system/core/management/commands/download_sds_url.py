@@ -1,13 +1,12 @@
 import os
 
-from django.core.management import BaseCommand
 import requests
+from django.conf import settings
+from django.core.management import BaseCommand
 from django.utils.text import slugify
 from tqdm import tqdm
 
-from core.models import SDSURLImport, SDS_PDF, SDSHarvestSource, IgnoreDomain
-from core.utils import md5hash
-from django.conf import settings
+from core.models import SDSURLImport, IgnoreDomain
 
 
 class Command(BaseCommand):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.text import slugify
 
 from .models import Product, Language, Wishlist, SDS_PDF, SDSHarvestSource, Manufacturer, SDSHarvestRun, SDSURLImport, \
     IgnoreDomain
@@ -82,9 +83,16 @@ class SDSHarvestRunAdmin(admin.ModelAdmin):
 
 
 class SDSURLImportAdmin(admin.ModelAdmin):
-    list_display = ('domain', 'is_processed','is_downloaded', 'is_sds', 'is_duplicate', 'download_failed', 'sds_pdf',)
-    search_fields = ['domain', 'sds_pdf']
+    list_display = ('domain', 'is_processed', 'is_downloaded', 'is_sds', 'is_duplicate', 'download_failed', 'pdf',)
+    search_fields = ['domain']
     list_filter = ('is_processed', 'is_downloaded', 'is_sds', 'is_duplicate', 'download_failed',)
+
+    def pdf(self, obj):
+        if not obj.is_downloaded:
+            return
+
+        slug = slugify(obj.domain)
+        return format_html(f'<a href="/media/sds/manual/{slug}/{slug}{obj.id}.pdf" target="_blank">PDF</a>')
 
 
 class IgnoreDomainAdmin(admin.ModelAdmin):
