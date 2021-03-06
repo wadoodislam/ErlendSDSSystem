@@ -148,8 +148,9 @@ class SDSURLImport(models.Model):
     is_processed = models.BooleanField(default=False)
     language = models.CharField(max_length=100)
     sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
-    path = models.CharField(max_length=100)
+    path = models.CharField(max_length=100, null=True)
     is_downloaded = models.BooleanField(default=False)
+    download_failed = models.BooleanField(default=False)
     is_sds = models.BooleanField(default=False)
     is_duplicate = models.BooleanField(default=False)
 
