@@ -18,7 +18,11 @@ class Command(BaseCommand):
         ignored_domains = IgnoreDomain.objects.values_list('domain', flat=True)
         for manual_sds in tqdm(SDSURLImport.objects.filter(is_downloaded=False).exclude(domain__in=ignored_domains).all()):
             try:
-                myfile = requests.get(url=manual_sds.link_to_pdf.replace('\ufeff', ''), allow_redirects=True)
+                myfile = requests.get(url=manual_sds.link_to_pdf.replace('\ufeff', ''),
+                                      allow_redirects=True,
+                                      # headers={'Accept': '*/*', 'Host': manual_sds.domain}
+                                      timeout=15
+                                      )
 
                 filename = slugify(manual_sds.domain+str(manual_sds.id))
                 path = f"{self.path}/{slugify(manual_sds.domain)}"
