@@ -145,6 +145,21 @@ class SDS_PDF(models.Model):
 class SDSURLImport(models.Model):
     link_to_pdf = models.URLField()
     domain = models.CharField(max_length=100)
-    is_processed = models.BooleanField(null=True)
+    is_processed = models.BooleanField(default=False)
     language = models.CharField(max_length=100)
     sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
+    path = models.CharField(max_length=100)
+    is_downloaded = models.BooleanField(default=False)
+    is_sds = models.BooleanField(default=False)
+    is_duplicate = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "pdf_bulk_import_links"
+
+
+class IgnoreDomains(models.Model):
+    domain = models.CharField(max_length=100)
+    reason = models.CharField(max_length=250, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
