@@ -32,7 +32,7 @@ class Command(BaseCommand):
                     pdf.write(myfile.content)
 
                 # manual_sds.path = '/media/sds/manual'
-                manual_sds.is_downloaded = True
+                # manual_sds.is_downloaded = True
                 manual_sds.save()
             except Exception as e:
                 print("Error:")
