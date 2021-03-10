@@ -16,7 +16,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         """Downloading Manually imported SDS and Putting in model"""
         ignored_domains = IgnoreDomain.objects.values_list('domain', flat=True)
-        for manual_sds in tqdm(SDSURLImport.objects.filter(is_downloaded=False).exclude(domain__in=ignored_domains).all()):
+        for manual_sds in tqdm(SDSURLImport.objects.filter(is_downloaded=False, download_failed=False
+                                                           ).exclude(domain__in=ignored_domains).all()):
             try:
                 myfile = requests.get(url=manual_sds.link_to_pdf.replace('\ufeff', ''),
                                       allow_redirects=True,
@@ -32,7 +33,7 @@ class Command(BaseCommand):
                     pdf.write(myfile.content)
 
                 # manual_sds.path = '/media/sds/manual'
-                # manual_sds.is_downloaded = True
+                manual_sds.is_downloaded = True
                 manual_sds.save()
             except Exception as e:
                 print("Error:")
