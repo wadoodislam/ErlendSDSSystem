@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor'
 ]
 
 LOCAL_APPS = [
@@ -138,16 +139,29 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = 'dashboard_with_pivot'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = '/admin/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 PHONENUMBER_DB_FORMAT = 'E164'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+
+COMPRESS_PRECOMPILERS = (("text/x-scss", "django_libsass.SassCompiler"),)
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    # other finders..
+    "compressor.finders.CompressorFinder",
+)
 
 MEDIA_ROOT = 'media/'
 MEDIA_URL = '/media/'
