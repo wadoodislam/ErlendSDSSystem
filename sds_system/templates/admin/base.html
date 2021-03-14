@@ -8,10 +8,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-{# {% load compress %}#}
-{#    {% compress css %}#}
-{#    <link rel=”stylesheet” href=”{% static "admin/bootstrap/scss/bootstrap.scss" %}” type=”text/x-scss” charset=”utf-8">#}
+{% load compress %}
+{# {% compress css %}#}
+{#    <link rel="stylesheet" href="{% static "admin/bootstrap/scss/bootstrap.scss" %}" type="text/x-scss" charset="utf-8">#}
 {# {% endcompress %}#}
+
 <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
 {% if not is_popup and is_nav_sidebar_enabled %}
   <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
@@ -28,6 +29,18 @@
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 
 
+
+<style type=”text/css”>
+
+    .navbar ul li {
+        list-style-type: none;
+        padding: 0;
+    }
+    .navbar .dropdown-toggle {
+        width: auto;
+    }
+</style>
+
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
@@ -38,49 +51,49 @@
 
     {% if not is_popup %}
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">SDS System</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <a class="navbar-brand" href="#">SDS System</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-     {% if user.is_authenticated %}
-          <li class="nav-item" style="margin-left: 15px">
-            <a class="nav-link" href="{% url 'dashboard_with_pivot' %}">Stats</a>
-          </li>
-          <li class="nav-item" style="margin-left: 15px">
-            <a class="nav-link" href="/admin">Admin Panel</a>
-          </li>
-         <li class="nav-item" style="margin-left: 15px">
-            <a class="nav-link" href="{% url 'core:analysis' %}">Analysis</a>
-          </li>
-          <li class="nav-item" style="margin-left: 15px">
-            <a class="nav-link" href="/admin/logout">Logout</a>
-          </li>
-          <li class="nav-item show" style="margin-left: 900px">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+         {% if user.is_authenticated %}
+              <li class="nav-item" style="margin-left: 15px">
+                <a class="nav-link" href="{% url 'dashboard_with_pivot' %}">Stats</a>
+              </li>
+              <li class="nav-item" style="margin-left: 15px">
+                <a class="nav-link" href="/admin">Admin&nbsp;Panel</a>
+              </li>
+             <li class="nav-item" style="margin-left: 15px">
+                <a class="nav-link" href="{% url 'core:analysis' %}">Analysis</a>
+              </li>
+              <li class="nav-item" style="margin-left: 15px">
+                <a class="nav-link" href="/admin/logout">Logout</a>
+              </li>
+              <li class="nav-item show" style="margin-left: 890px">
 
-            <select id="languages" onChange='document.cookie = `language=${value}`' class="btn btn-secondary dropdown-toggle" style="padding-bottom: 2px; height: 40px">
-                <option value="en" selected>English</option>
-                <option value="es" >Spanish</option>
-                <option value="ge">German</option>
-                <option value="nb">Norwegian</option>
-                <option value="dk">Danish</option>
-                <option value="se">Swedish</option>
-                <option value="es">Spanish</option>
-                <option value="pt">Portugese</option>
-            </select>
-          </li>
-        {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-          </li>
-        {% endif %}
-    </ul>
+                <select id="languages" onChange='document.cookie = `language=${value}`' class="btn btn-secondary dropdown-toggle" style="padding-bottom: 2px; height: 40px">
+                    <option value="en" >English</option>
+                    <option value="es" >Spanish</option>
+                    <option value="ge">German</option>
+                    <option value="nb">Norwegian</option>
+                    <option value="dk">Danish</option>
+                    <option value="se">Swedish</option>
+                    <option value="es">Spanish</option>
+                    <option value="pt">Portugese</option>
+                </select>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+              </li>
+            {% endif %}
+        </ul>
 
-  </div>
-</nav>
+      </div>
+    </nav>
 
     <!-- END Header -->
     {% block breadcrumbs %}
@@ -123,14 +136,17 @@
     </div>
 </div>
 <!-- END Container -->
+
 {# bootstrap js #}
-{#<script src=”https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity=”sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo” crossorigin=”anonymous”></script>#}
-{#<script src=”https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity=”sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin=”anonymous”></script>#}
-{#{% compress js %}#}
-{#    <script src=”{% static "admin/bootstrap/js/dist/util.js" %}” type=”text/javascript” charset=”utf-8"></script>#}
-{#    <script src=”{% static "admin/bootstrap/js/dist/dropdown.js" %}” type=”text/javascript” charset=”utf-8"></script>#}
-{#    <script src=”{% static "admin/bootstrap/js/dist/collapse.js" %}” type=”text/javascript” charset=”utf-8"></script>#}
-{#{% endcompress %}#}
-{# END bootstrap js #}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<
+
+{% compress js %}
+{#    <script src="{% static "admin/bootstrap/js/dist/util.js" %}" type="text/javascript" charset="utf-8"></script>#}
+    <script src="{% static "admin/bootstrap/js/dist/dropdown.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "admin/bootstrap/js/dist/collapse.js" %}" type="text/javascript" charset="utf-8"></script>
+{% endcompress %}
+{# END bootstrap js#}
 </body>
 </html>

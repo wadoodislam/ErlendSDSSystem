@@ -1,5 +1,4 @@
 import PyPDF2
-import glob
 
 from django.core.management import BaseCommand
 from django.utils.text import slugify
@@ -14,48 +13,38 @@ class Command(BaseCommand):
     text = ""
 
     def handle(self, *args, **kwargs):
-        # for file in glob.glob(self.path+'/*'):
-        # language_of_SDSURLImport = Language.objects.get(name='ge')
         for manual_sds in tqdm(SDSURLImport.objects.filter(is_downloaded=True).all()):
-            filename = slugify(manual_sds.domain + str(manual_sds.id))
-            file_path = f"{self.path}/{slugify(manual_sds.domain)}/{filename}.pdf"
-            pdfReader = PyPDF2.PdfFileReader(open(file_path, "rb"))
+            try:
+                filename = slugify(manual_sds.domain + str(manual_sds.id))
+                file_path = f"{self.path}/{slugify(manual_sds.domain)}/{filename}.pdf"
+                pdfReader = PyPDF2.PdfFileReader(open(file_path, "rb"))
 
+                for page_num in range(pdfReader.numPages):
+                    pageObj = pdfReader.getPage(page_num)
+                    self.text = self.text + f'{pageObj.extractText()}'
 
-            for page_num in range(pdfReader.numPages):
-                pageObj = pdfReader.getPage(page_num)
-                self.text = self.text + f'{pageObj.extractText()}'
+                if 'SICHERHEITSDATENBLATT' in self.text:
+                    language = 'ge'
+                elif 'sikkerhetsdatablad' in self.text:
+                    language = 'nb'
+                elif 'safety data sheet' in self.text:
+                    language = 'en'
+                elif 'Sikkerhedsdatablad' in self.text:
+                    language = 'dk'
+                elif 'Säkerhetsdatablad' in self.text:
+                    language = 'se'
+                elif 'FICHA DE DATOS DE SEGURIDAD' in self.text:
+                    language = 'es'
+                elif 'FICHA DE INFORMAÇÃO DE SEGURANÇA DE PRODUTO QUÍMICO' in self.text:
+                    language = 'pt'
+                else:
+                    language = False
 
-            if 'SICHERHEITSDATENBLATT' in self.text:
-                #ge German
-                #language_of_SDSURLImport = Language.objects.get(name='ge')
-                pass
-            elif 'sikkerhetsdatablad' in self.text:
-                #nb Norwegian
-                #language_of_SDSURLImport = Language.objects.get(name='nb')
-                pass
-            elif 'safety data sheet' in self.text:
-                #en English
-                #language_of_SDSURLImport = Language.objects.get(name='en')
-                pass
-            elif 'Sikkerhedsdatablad' in self.text:
-                #dk Danish
-                #language_of_SDSURLImport = Language.objects.get(name='dk')
-                pass
-            elif 'Säkerhetsdatablad' in self.text:
-                #se Swedish
-                #language_of_SDSURLImport = Language.objects.get(name='se')
-                pass
-            elif 'FICHA DE DATOS DE SEGURIDAD' in self.text:
-                #es Spanish
-                #language_of_SDSURLImport = Language.objects.get(name='es')
-                pass
-            elif 'FICHA DE INFORMAÇÃO DE SEGURANÇA DE PRODUTO QUÍMICO' in self.text:
-                #pt Portugese
-                #language_of_SDSURLImport = Language.objects.get(name='pt')
-                pass
-            else:
-                # not detected
-                pass
+                if language:
+                    manual_sds.language = Language.objects.get(name=language)
+                    manual_sds.save()
 
-            self.text = ''
+                self.text = ''
+
+            except Exception as e:
+                print("Error:", filename, e, sep=' | ')

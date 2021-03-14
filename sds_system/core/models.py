@@ -147,7 +147,7 @@ class SDSURLImport(models.Model):
     link_to_pdf = models.URLField()
     domain = models.CharField(max_length=100)
     is_processed = models.BooleanField(default=False)
-    language = models.ForeignKey('Language', null=True, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, null=True, on_delete=models.CASCADE)
     sds_pdf = models.ForeignKey('SDS_PDF', null=True, blank=True, on_delete=models.SET_NULL)
     path = models.CharField(max_length=100, null=True)
     is_downloaded = models.BooleanField(default=False)
