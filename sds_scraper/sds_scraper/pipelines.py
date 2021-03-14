@@ -33,7 +33,7 @@ class BoilerplatePipeline:
         item['sds_harvest_run'] = spider.run_id
         item['sds_path'] = item['files'][0]['path']
         item['sds_status'] = item['files'][0]['status']
-        item['sds_link'] = item['files'][0]['url']
+        item['sds_download_url'] = item['files'][0]['url']
         item['language'] = spider.language
         return item
 
